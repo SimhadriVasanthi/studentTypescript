@@ -5,7 +5,8 @@ import workExperienceSlice from '../reducers/workExperienceSlice'
 export const store = configureStore({
   reducer: {
     workExperience: workExperienceSlice,
-    // shortlistedCourses:ShortlistedCoursesSlice,
   },
 })
+
 export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch

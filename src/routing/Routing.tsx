@@ -7,11 +7,12 @@ function Routing () {
   return (
     <>
       <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Login/>} />
-              <Route element={<ProtectedRoute link={"/"} />}>
-                </Route>
-            </Routes>
+        <Routes>
+          <Route path="/" element={<Login/>} />
+          <Route element={<ProtectedRoute link={"/"} />}>
+
+          </Route>
+        </Routes>
       </BrowserRouter>
     </>
   );
