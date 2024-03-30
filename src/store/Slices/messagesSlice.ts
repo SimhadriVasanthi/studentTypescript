@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Message, StoreItem } from "../types/types";
+import { Message, StoreItem } from "../../types/types";
 
 let initialState:StoreItem<Message[]>={
     requestStatus:"not_initiated",

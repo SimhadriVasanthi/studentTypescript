@@ -13,9 +13,9 @@ export const workexperienceSlice=createSlice({
     reducers:{
         initWorkexperience:(state,action:StoreAction<StoreItem<WorkExperience[]>>)=>({...action.payload}),
         addWorkexperience:(state,action:StoreAction<WorkExperience>)=>{state.data.push(action.payload)},
-        removeWorkexperience:(state,action:StoreAction<string>)=>{state.data=state.data.filter((item)=>item._id!=action.payload)},
+        removeWorkexperience:(state,action:StoreAction<string>)=>{state.data=state.data.filter((item:any)=>item._id!==action.payload)},
         updateWorkexperience:(state,action:StoreAction<WorkExperience>)=>{
-            let index=state.data.findIndex((item)=>item._id==action.payload._id)
+            let index=state.data.findIndex((item:any)=>item._id===action.payload._id)
             state.data[index]=action.payload;
         },
         setWorkExperience:(state,action:StoreAction<WorkExperience[]>)=>{state.data=action.payload}

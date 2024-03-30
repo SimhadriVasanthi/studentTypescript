@@ -5,7 +5,6 @@ import chatsSlice from './Slices/chatsSlice'
 import messagesSlice from './Slices/messagesSlice'
 import shortlistedCoursesSlice from './Slices/shortlistedCoursesSlice'
 import applicationsSlice from './Slices/applicationsSlice'
-// import { ShortlistedCoursesSlice } from '../reducers/shortlistedSlice'
 
 
 export const store = configureStore({
