@@ -1,10 +1,21 @@
 import { configureStore } from '@reduxjs/toolkit'
+import workexperienceSlice from './Slices/workexperienceSlice'
+import educationHistorySlice from './Slices/educationHistorySlice'
+import chatsSlice from './Slices/chatsSlice'
+import messagesSlice from './Slices/messagesSlice'
+import shortlistedCoursesSlice from './Slices/shortlistedCoursesSlice'
+import applicationsSlice from './Slices/applicationsSlice'
 // import { ShortlistedCoursesSlice } from '../reducers/shortlistedSlice'
-import workExperienceSlice from '../reducers/workExperienceSlice'
+
 
 export const store = configureStore({
   reducer: {
-    workExperience: workExperienceSlice,
+    workexperience:workexperienceSlice,
+    educationhistory:educationHistorySlice,
+    chats:chatsSlice,
+    messages:messagesSlice,
+    shortlistedcourses:shortlistedCoursesSlice,
+    applications:applicationsSlice
   },
 })
 

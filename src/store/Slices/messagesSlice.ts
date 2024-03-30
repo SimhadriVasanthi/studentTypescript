@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Message, StoreItem } from "../types/types";
 
 let initialState:StoreItem<Message[]>={
@@ -13,7 +13,7 @@ export const messagesSlice=createSlice({
     name:'messages',
     initialState:initialState,
     reducers:{
-        initMessages:(state,action)=>({...action.payload,data:action.payload.data.map((msg)=>({...msg,type:'normal'}))}),
+        initMessages:(state,action:PayloadAction<StoreItem<Message[]>>)=>({...action.payload,data:action.payload.data.map((msg)=>({...msg,type:'normal'}))}),
         setMessages:(state,action)=>{state.data=action.payload},
         resetMessages:(state,action)=>({
             requestStatus:"initiated",
@@ -49,7 +49,7 @@ export const messagesSlice=createSlice({
         updateMessage:(state,action)=>{
             //var updatedlist=[];
             //state.forEach(element => {element._id!=action.payload.id?updatedlist.push(element):updatedlist.push(action.payload.newdata)});
-            state[action.payload.id]=action.payload.newdata;
+            //state[action.payload.id]=action.payload.newdata;
             return state;
         }
     }

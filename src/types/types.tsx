@@ -310,7 +310,7 @@ export interface Store{
     workexperience:StoreItem<WorkExperience[]>,
     skills:StoreItem<any>,
     educationhistory:StoreItem<any>,
-    shortlistedcourses:StoreItem<Shortlisted[]>,
+    shortlistedcourses:StoreItem<ShortlistedCourse[]>,
     recommendedcourses:StoreItem<any>,
     chats:StoreItem<{advisors:Chat[],community:Chat[]}>,
     messages:StoreItem<Message[]>,
@@ -347,7 +347,7 @@ export interface Store{
 //     headers?:any
 // }
 
-export interface Shortlisted{
+export interface ShortlistedCourse{
     university: {
         location: {
             country: string,
