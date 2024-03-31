@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "../assets/hooks"
-import { setEducationHistory } from "../store/Slices/educationHistorySlice"
+import {  setSchool } from "../store/Slices/educationHistorySlice"
 import { EducationHistory, EducationHistory_School } from "../types/types"
 
 const EducationHistory=()=>{
@@ -8,7 +8,7 @@ const EducationHistory=()=>{
     const Appdispatch=useAppDispatch()
 
     const addSchool=(obj:EducationHistory_School)=>{
-        Appdispatch(setEducationHistory({type:'school',data:obj}));
+        Appdispatch(setSchool(obj));
     }
 
     return(
