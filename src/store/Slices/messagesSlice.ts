@@ -23,11 +23,11 @@ export const messagesSlice=createSlice({
             data:[]
         }),
         addMessage:(state,action)=>{
-            state.data.findIndex((msg)=>msg.type=="typing")==-1
+            state.data.findIndex((msg)=>msg.type==="typing")===-1
             ?
             state.data.push(action.payload)
             :
-            state.data=[...state.data.filter((msg)=>msg.type!="typing"),action.payload]
+            state.data=[...state.data.filter((msg)=>msg.type!=="typing"),action.payload]
             // if(action.payload.type=="typing")
             // {
             //     newMessages=[...state.filter((item)=>item._id!="typing"),{_id:"typing",type:'typing'}]
@@ -44,8 +44,8 @@ export const messagesSlice=createSlice({
             //return newMessages;
         },
         typingMessage:(state,action)=>{state.data.push(action.payload)},
-        seenMessage:(state:StoreItem<Message[]>,action)=>{state.data=state.data.filter((item)=>item.type=="seen")},
-        removeMessage:(state,action)=>{state.data.filter((item,index)=>item._id!=action.payload)},
+        seenMessage:(state:StoreItem<Message[]>,action)=>{state.data=state.data.filter((item)=>item.type==="seen")},
+        removeMessage:(state,action)=>{state.data.filter((item,index)=>item._id!==action.payload)},
         updateMessage:(state,action)=>{
             //var updatedlist=[];
             //state.forEach(element => {element._id!=action.payload.id?updatedlist.push(element):updatedlist.push(action.payload.newdata)});

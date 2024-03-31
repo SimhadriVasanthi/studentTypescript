@@ -37,31 +37,31 @@ export const chatsSlice=createSlice({
         },
         updateParticipantActivity:(state:StoreItem<{advisors:Chat[],community:Chat[]}>,action:PayloadAction<Participant>)=>{
             state.data.advisors=state.data.advisors.map((chat)=>{
-                let index=chat.participants.findIndex((participant)=>participant._id==action.payload._id)
-                if(index==-1){
+                let index=chat.participants.findIndex((participant)=>participant._id===action.payload._id)
+                if(index===-1){
                     return chat
                 }
                 else
                 {
-                    return {...chat,participants:chat.participants.map((participant)=>participant._id==action.payload._id?{...participant,activity:action.payload.activity}:participant)}
+                    return {...chat,participants:chat.participants.map((participant)=>participant._id===action.payload._id?{...participant,activity:action.payload.activity}:participant)}
                 }
             })
             state.data.community=state.data.community.map((chat)=>{
-                let index=chat.participants.findIndex((participant)=>participant._id==action.payload._id)
-                if(index==-1){
+                let index=chat.participants.findIndex((participant)=>participant._id===action.payload._id)
+                if(index===-1){
                     return chat
                 }
                 else
                 {
-                    return {...chat,participants:chat.participants.map((participant)=>participant._id==action.payload._id?{...participant,activity:action.payload.activity}:participant)}
+                    return {...chat,participants:chat.participants.map((participant)=>participant._id===action.payload._id?{...participant,activity:action.payload.activity}:participant)}
                 }
             })
         },
         updateParticipantsActivity:(state:StoreItem<{advisors:Chat[],community:Chat[]}>,action:PayloadAction<Participant[]>)=>{
             state.data.advisors=state.data.advisors.map((chat)=>{
                 return {...chat,participants:chat.participants.map((participant)=>{
-                    let i=action.payload.findIndex((item)=>item._id==participant._id)
-                    if(i==-1)
+                    let i=action.payload.findIndex((item)=>item._id===participant._id)
+                    if(i===-1)
                     {
                         return participant
                     }
@@ -73,8 +73,8 @@ export const chatsSlice=createSlice({
             })
             state.data.community=state.data.community.map((chat)=>{
                 return {...chat,participants:chat.participants.map((participant)=>{
-                    let i=action.payload.findIndex((item)=>item._id==participant._id)
-                    if(i==-1)
+                    let i=action.payload.findIndex((item)=>item._id===participant._id)
+                    if(i===-1)
                     {
                         return participant
                     }
@@ -87,14 +87,14 @@ export const chatsSlice=createSlice({
         },
         updateChat:(state,action:PayloadAction<Chat>)=>{
             let chatType:ChatType=getChatType(action.payload);
-            let index=state.data[chatType].findIndex((chat)=>chat._id==action.payload._id)
+            let index=state.data[chatType].findIndex((chat)=>chat._id===action.payload._id)
             state.data[chatType][index]={...action.payload,participants:state.data[chatType][index].participants}
         }
     }
 })
 
 const getChatType=(chat:Chat)=>{
-    return chat.participants.findIndex((participant)=>participant.userType=="member")==-1?"community":"advisors"
+    return chat.participants.findIndex((participant)=>participant.userType==="member")===-1?"community":"advisors"
 }
 
 export const {initChats,addChats,updateParticipantsActivity,updateChat,updateParticipantActivity}=chatsSlice.actions;
@@ -107,14 +107,14 @@ export default chatsSlice.reducer;
 
         //         case "chat":
         //             chatType=getChatType(action.payload.additionalData.chatData,action.payload.profile);
-        //             let index2=clone[chatType].findIndex((chat)=>chat._id==action.payload.additionalData.chatData._id)
+        //             let index2=clone[chatType].findIndex((chat)=>chat._id===action.payload.additionalData.chatData._id)
         //             clone[chatType][index2]={...clone[chatType][index2],unSeenMessages:action.payload.additionalData.chatData.unSeenMessages,lastMessage:action.payload.additionalData.chatData.lastMessage};
         //             break;
 
         //         case "userActivity":
         //             clone[chatType]=clone[chatType].map((chat)=>{
-        //                 let index=chat.participants.findIndex((participant)=>participant._id==action.payload.additionalData.participant.id);
-        //                 if(index==-1){
+        //                 let index=chat.participants.findIndex((participant)=>participant._id===action.payload.additionalData.participant.id);
+        //                 if(index===-1){
         //                     return chat;
         //                 }   
         //                 else{
@@ -125,17 +125,17 @@ export default chatsSlice.reducer;
 
         //         case "chatActivity":
         //             chatType=getChatType(action.payload.additionalData.chatData,action.payload.profile);
-        //             let index=clone[chatType].findIndex((chat)=>chat._id==action.payload.additionalData.chatData._id)
+        //             let index=clone[chatType].findIndex((chat)=>chat._id===action.payload.additionalData.chatData._id)
         //             clone[chatType][index]={...clone[chatType][index],activity:action.payload.additionalData.activityData}
         //             break;
 
         //         case "usersActivity":
         //             action.payload.additionalData.activityData.forEach((friend)=>{
         //                 clone.advisor.forEach((chat)=>{
-        //                     chat.participants=chat.participants.map((participant)=>participant._id==friend._id?{...participant,activity:friend.activity}:participant)
+        //                     chat.participants=chat.participants.map((participant)=>participant._id===friend._id?{...participant,activity:friend.activity}:participant)
         //                 })
         //                 clone.community.forEach((chat)=>{
-        //                     chat.participants=chat.participants.map((participant)=>participant._id==friend._id?{...participant,activity:friend.activity}:participant)
+        //                     chat.participants=chat.participants.map((participant)=>participant._id===friend._id?{...participant,activity:friend.activity}:participant)
         //                 })
         //             })
         //             break;

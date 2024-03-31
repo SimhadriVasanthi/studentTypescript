@@ -21,6 +21,20 @@ export type RoutingProps = {
     issue: string;
     data: any;
   }
+  export type expandCardProps = {
+    title: string;
+    children: React.ReactNode;
+  };
+
+  export type buttonProps ={
+    children:string,
+    handleSubmit:Function,
+    width:string,
+  }
+  export type sideMenu = {
+    title?: string;
+    link?: string;
+  };
 
 
 interface Event{

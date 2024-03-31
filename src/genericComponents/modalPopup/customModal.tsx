@@ -3,7 +3,7 @@ import { Dialog, DialogContent } from "@mui/material";
 import { ModalDialogprops } from "../../types/types";
 import CloseIcon from "@mui/icons-material/Close";
 
-const CustomModal = ({ open, children, handleClose,additionalData }: ModalDialogprops<null>) => {
+const CustomModal = ({ open, children, handleClose,additionalData }: ModalDialogprops<{ width: any;}>) => {
   return (
     <>
       <Dialog
@@ -14,7 +14,7 @@ const CustomModal = ({ open, children, handleClose,additionalData }: ModalDialog
         PaperProps={{
           style: {
             minWidth: "200px",
-            width: "550px",
+            width: `${additionalData?.width}`,
             borderRadius: "1.5rem",
             padding: "1rem",
             maxWidth: "800px",
@@ -25,8 +25,8 @@ const CustomModal = ({ open, children, handleClose,additionalData }: ModalDialog
           onClick={() => handleClose()}
           sx={{
             position: "absolute",
-            right: 8,
-            top: 8,
+            right: 14,
+            top: 14,
             color: "#E94040",
             cursor: "pointer",
           }}

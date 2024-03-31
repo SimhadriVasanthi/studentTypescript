@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { EducationHistory, EducationHistory_Plus2, EducationHistory_PostGraduation, EducationHistory_School, EducationHistory_UnderGraduation, StoreItem } from "../../types/types";
+import { EducationHistory,StoreItem } from "../../types/types";
 
 type EducationType="school" | "plus2" | "underGraduation" | "postGraduation"
 //type EducationData=EducationHistory_School | EducationHistory_Plus2 | EducationHistory_UnderGraduation | EducationHistory_PostGraduation
