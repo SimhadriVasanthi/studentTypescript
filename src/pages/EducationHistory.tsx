@@ -3,7 +3,11 @@ import { RootState } from "../store/store"
 import { EducationHistory_Plus2, EducationHistory_School,EducationHistory_UnderGraduation,EducationHistory_PostGraduation } from "../types/types"
 import {setSchool,setPlus2,setPostGraduation,setUnderGraduation} from '../store/Slices/educationHistorySlice';
 const EducationHistory=()=>{
+    const personalInfo = useAppSelector((state:RootState)=>state.personalInfo);
+    
+    const updateTemporaryaddress = ()=>{
 
+    }
     const educationhistory=useAppSelector((state:RootState)=>state.educationhistory)
     const Appdispatch=useAppDispatch()
 

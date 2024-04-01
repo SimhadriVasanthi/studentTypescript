@@ -5,6 +5,8 @@ import chatsSlice from './Slices/chatsSlice'
 import messagesSlice from './Slices/messagesSlice'
 import shortlistedCoursesSlice from './Slices/shortlistedCoursesSlice'
 import applicationsSlice from './Slices/applicationsSlice'
+import userAuthSlice from './Slices/userAuthSlice'
+import personalInfoSlice from './Slices/personalInfoSlice'
 
 
 export const store = configureStore({
@@ -14,7 +16,9 @@ export const store = configureStore({
     chats:chatsSlice,
     messages:messagesSlice,
     shortlistedcourses:shortlistedCoursesSlice,
-    applications:applicationsSlice
+    applications:applicationsSlice,
+    userAuthStatus:userAuthSlice,
+    personalInfo:personalInfoSlice,
   },
 })
 

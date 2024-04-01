@@ -13,9 +13,9 @@ function Routing () {
       <BrowserRouter>
       <Header/>
         <Routes>
-          <Route path="/" element={<Login/>} />
+          {/* <Route path="/" element={<Login/>} /> */}
           <Route path="/courses" element={<Courses/>} />
-          <Route path="/home" element={<Home/>} />
+          <Route path="/" element={<Home/>} />
           <Route path="/recommendations" element={<Recommendations/>} />
 
 

@@ -21,7 +21,7 @@ import Login from "../authentication/Login";
 const pages = [
   {
     title: "Home",
-    link: "/home",
+    link: "/",
   },
   {
     title: "Courses",

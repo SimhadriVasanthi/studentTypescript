@@ -1,8 +1,6 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://onewindow-v1-server.onrender.com/api/v1",
-  // baseURL: "/api/v1",
-
+  baseURL: process.env.REACT_APP_BASE_URL,
 });
 export default api;
