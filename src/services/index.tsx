@@ -1,5 +1,5 @@
 import api from "./baseUrl";
-import { dashboardEndPoint, loginEndPoint, registerEndPoint, userProfileEndPoint } from "./endpoints";
+import { dashboardEndPoint, loginEndPoint, registerEndPoint, sendOTPEndPoint, userProfileEndPoint, verifyOTPEndPoint } from "./endpoints";
 import { AxiosError } from "axios";
 
 const token = localStorage.getItem("_auth");
@@ -28,7 +28,6 @@ const authenticateLogin = async (values:object, setError: (error: string) => voi
     return err.response;
   }
 };
-
 const registerSignin = async (values:object, setError: (error: string) => void) => {
   function sanitizeValues(data:any) {
     return { firstName: data.firstName,lastName:data.lastName, email: data.email, password: data.password };
@@ -39,6 +38,50 @@ const registerSignin = async (values:object, setError: (error: string) => void) 
       sanitizeValues(values),
       {
         withCredentials: true,
+      }
+    );
+    return response;
+  } catch (err:any) {
+    if (err && err instanceof AxiosError) {
+      setError(err.response?.data.message);
+    } else if (err && err instanceof Error) setError(err.message);
+    return err.response;
+  }
+};
+//forgot password
+
+const forgotPswdOtp = async (values:object, setError: (error: string) => void) => {
+  function sanitizeValues(data:any) {
+    return { email: data.email };
+  }
+  try {
+    const response = await api.post(sendOTPEndPoint(), sanitizeValues(values), {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token }`,
+      },
+    });
+    return response;
+  } catch (err:any) {
+    if (err && err instanceof AxiosError) {
+      setError(err.response?.data.message);
+    } else if (err && err instanceof Error) setError(err.message);
+    return err.response;
+  }
+};
+const verifyForgotPswdOtp = async (values:object, setError: (error: string) => void) => {
+  function sanitizeValues(data:any) {
+    return { email: data.email, otp: data.otp, password: data.password };
+  }
+  try {
+    const response = await api.post(
+      verifyOTPEndPoint(),
+      sanitizeValues(values),
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token }`,
+        },
       }
     );
     return response;
@@ -76,4 +119,4 @@ const getDashboard = async (setError: (error: string) => void) => {
   }
 };
 
-export { getProfile, getDashboard,registerSignin,authenticateLogin };
+export { getProfile, getDashboard,registerSignin,authenticateLogin,forgotPswdOtp,verifyForgotPswdOtp };

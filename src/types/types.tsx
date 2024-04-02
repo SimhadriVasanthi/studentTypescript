@@ -14,6 +14,15 @@ export type RoutingProps = {
     email: string;
     password: string;
   };
+  export type SignUpProps = {
+    firstName:string,
+    lastName:string,
+    email: string;
+    password: string;
+    cPassword: string;
+
+  };
+  
   export type initialData ={
     requestStatus: string;
     responseStatus: string;
@@ -22,7 +31,7 @@ export type RoutingProps = {
     data: any;
   }
   export type expandCardProps = {
-    title: string;
+    handleSubmit: Function;
     children: React.ReactNode;
   };
 

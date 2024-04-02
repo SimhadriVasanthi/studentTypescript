@@ -16,7 +16,7 @@ import { Stack } from "@mui/material";
 import { CustomButton } from "../../genericComponents/customButton";
 import { useNavigate } from "react-router-dom";
 import CustomModal from "../../genericComponents/modalPopup/customModal";
-import Login from "../authentication/Login";
+import Authentication from "../authentication";
 
 const pages = [
   {
@@ -199,9 +199,9 @@ const Header = () => {
       <CustomModal
         open={open}
         handleClose={handleCloseModal}
-        additionalData={{ width: "450px" }}
+        additionalData={{ width: "500px" }}
       >
-        <Login />
+        <Authentication/>
       </CustomModal>
     </AppBar>
   );

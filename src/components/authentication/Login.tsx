@@ -6,26 +6,41 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Field, Form, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useState } from "react";
 import Images from "../../assets";
 import { useAppDispatch, useAppSelector } from "../../assets/hooks";
 import { CustomButton } from "../../genericComponents/customButton";
 import { authenticateLogin } from "../../services";
 import { initUserAuthStatus } from "../../store/Slices/userAuthSlice";
-import { RootState } from "../../store/store";
 import { loginProps } from "../../types/types";
+import * as Yup from "yup";
 
-const Login = () => {
+const Login = ({ setLoginOrSignup }: any) => {
   const [error, setError] = useState("");
   const Appdispatch = useAppDispatch();
   const initValues = {
     email: "",
     password: "",
   };
+  const loginSchema = Yup.object().shape({
+    password: Yup.string()
+      .min(3, "Too Short!")
+      .max(25, "Too Long!")
+      .required("Password is required"),
+    email: Yup.string()
+      .matches(
+        /([a-z0-9]+)([\_\.\-{1}])?([a-zA-Z0-9]+)\@([a-zA-Z0-9]+)([\.])([a-z\.]+)/g,
+        "Enter valid Email"
+      )
+      .required("Enter Email ID")
+      .max(40, "Email ID must be atmost 40 characters"),
+  });
+
   const onSubmitForm = async (values: loginProps) => {
     const response = await authenticateLogin(values, setError);
     if (response) {
+      localStorage.setItem("_auth", response?.data?.data?.AccessToken);
       Appdispatch(
         initUserAuthStatus({
           requestStatus: "initiated",
@@ -45,10 +60,6 @@ const Login = () => {
     console.log(response);
   };
 
-  const userAuthData = useAppSelector(
-    (state: RootState) => state.userAuthStatus
-  );
-  console.log(userAuthData);
   return (
     <Box sx={{ px: 5 }}>
       <Box sx={{ mb: 1.5 }}>
@@ -68,6 +79,7 @@ const Login = () => {
       </Box>
       <Formik
         initialValues={initValues}
+        validationSchema={loginSchema}
         onSubmit={(values: loginProps) => onSubmitForm(values)}
         enableReinitialize={true}
       >
@@ -90,6 +102,9 @@ const Login = () => {
                   fullWidth
                   sx={{}}
                 />
+                <div style={{ color: "#e60c0c", fontSize: "12px" }}>
+                  <ErrorMessage name="email" component="div" />
+                </div>
               </Grid>
               <Grid item xs={12}>
                 <InputLabel
@@ -110,6 +125,9 @@ const Login = () => {
                   fullWidth
                   sx={{}}
                 />
+                <div style={{ color: "#e60c0c", fontSize: "12px" }}>
+                  <ErrorMessage name="password" component="div" />
+                </div>
               </Grid>
               <Grid item xs={12}>
                 <Link
@@ -122,6 +140,7 @@ const Login = () => {
                     my: 1,
                     cursor: "pointer",
                   }}
+                  onClick={() => setLoginOrSignup("forgotPassword")}
                 >
                   Forgot password
                 </Link>
@@ -144,6 +163,7 @@ const Login = () => {
                       fontWeight: 600,
                       cursor: "pointer",
                     }}
+                    onClick={() => setLoginOrSignup("signup")}
                   >
                     Sign up
                   </Link>
