@@ -35,7 +35,7 @@ const Sessions = () => {
       {/* Map over the advisors array and render each advisor's information */}
       {advisors?.map((advisor: Advisor, index: number) => (
         <Box key={index} sx={{ boxShadow:1, padding: '1rem', marginBottom: '1rem',borderRadius:"10px" }}>
-          <Typography fontSize="16px" color="#3B3F76">{advisor.role}</Typography>
+          <Typography fontSize="16px" color="#3B3F76" className="underlined">{advisor.role}</Typography>
           <Typography variant="body1">{advisor.name}</Typography>
           <Typography variant="body1">{advisor.emailId}</Typography>
         </Box>

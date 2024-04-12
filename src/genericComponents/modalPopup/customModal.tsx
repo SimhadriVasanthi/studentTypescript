@@ -2,13 +2,17 @@ import * as React from "react";
 import { Dialog, DialogContent } from "@mui/material";
 import { ModalDialogprops } from "../../types/types";
 import CloseIcon from "@mui/icons-material/Close";
+import { useAppDispatch } from "../../assets/hooks";
+import { closePopup } from "../../store/Slices/popupSlice";
 
-const CustomModal = ({ open, children, handleClose,additionalData }: ModalDialogprops<{ width: any;}>) => {
+const CustomModal = ({ open, children,additionalData }: ModalDialogprops<{ width: any;}>) => {
+
+  const dispatch = useAppDispatch();
   return (
     <>
       <Dialog
         open={open}
-        onClose={() => handleClose()}
+        // onClose={()=>dispatch(closePopup())}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         PaperProps={{
@@ -22,7 +26,7 @@ const CustomModal = ({ open, children, handleClose,additionalData }: ModalDialog
         }}
       >
         <CloseIcon
-          onClick={() => handleClose()}
+          onClick={()=>dispatch(closePopup())}
           sx={{
             position: "absolute",
             right: 14,

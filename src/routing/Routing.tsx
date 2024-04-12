@@ -6,32 +6,47 @@ import Home from "../pages/home/Home";
 import Recommendations from "../pages/Recommendations";
 import Profile from "../pages/profile/Profile";
 import ProfileLayout from "../pages/profile/Profile";
+import { useAppSelector } from "../assets/hooks";
+import CustomModal from "../genericComponents/modalPopup/customModal";
+import { COMPONENTS } from "../assets/enums";
 
-function Routing () {
+export const getComponent = (id: string) => {
+  let index = COMPONENTS.findIndex((item) => item.name == id);
+  return COMPONENTS[index].component;
+};
+
+function Routing() {
+  const popup = useAppSelector((state) => state.popup);
+  const Popupcomponent: React.FC<{ data: any }> | null =
+    popup.data.show && popup.data.data?.container?.name
+      ? getComponent(popup?.data?.data?.container?.name)
+      : null;
+
   return (
     <>
-    
       <BrowserRouter>
-      <Header/>
+        <Header />
         <Routes>
           {/* <Route path="/" element={<Login/>} /> */}
-          <Route path="/courses" element={<Courses/>} />
-          <Route path="/" element={<Home/>} />
-          <Route path="/sidebar" element={<Profile/>} />
-
-          <Route path="/recommendations" element={<Recommendations/>} />
-          
-
+          <Route path="/courses" element={<Courses />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/sidebar" element={<Profile />} />
+          <Route path="/recommendations" element={<Recommendations />} />
           <Route element={<ProtectedRoute link={"/profile/*"} />}>
-          <Route
-              path="/profile/*"
-              element={
-                  <ProfileLayout/>
-              }
-            />
+            <Route path="/profile/*" element={<ProfileLayout />} />
           </Route>
         </Routes>
       </BrowserRouter>
+      <CustomModal
+        open={popup.data.show}
+        additionalData={{
+          width: popup.data.data?.container?.dimensions?.width,
+        }}
+      >
+        {Popupcomponent ? (
+          <Popupcomponent data={popup.data.data?.container?.data} />
+        ) : null}
+      </CustomModal>
     </>
   );
 }

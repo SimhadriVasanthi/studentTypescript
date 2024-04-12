@@ -2,106 +2,122 @@ import { FC } from "react";
 import { IndustryTypeEnum, WorkStyleEnum } from "../assets/enums";
 
 export type RoutingProps = {
-    link: string;
-  };
-  export type ModalDialogprops<additionalDataType> = {
-    open: boolean;
-    handleClose:Function ;
-    children?: React.ReactNode;
-    additionalData?:additionalDataType
-  };
-  export type loginProps = {
-    email: string;
-    password: string;
-  };
-  export type SignUpProps = {
-    firstName:string,
-    lastName:string,
-    email: string;
-    password: string;
-    cPassword: string;
+  link: string;
+};
+export type ModalDialogprops<additionalDataType> = {
+  open: boolean;
+  handleClose?: Function;
+  children?: React.ReactNode;
+  additionalData?: additionalDataType;
+};
+export type loginProps = {
+  email: string;
+  password: string;
+};
+export type SignUpProps = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  cPassword: string;
+};
 
-  };
-  
-  export type initialData ={
-    requestStatus: string;
-    responseStatus: string;
-    haveAnIssue: boolean;
-    issue: string;
-    data: any;
-  }
-  export type expandCardProps = {
-    handleSubmit: Function;
-    children: React.ReactNode;
-  };
+export type initialData = {
+  requestStatus: string;
+  responseStatus: string;
+  haveAnIssue: boolean;
+  issue: string;
+  data: any;
+};
+export type customCardProps = {
+  handleSubmit: Function;
+  children: React.ReactNode;
+};
 
-  export type buttonProps ={
-    children:string,
-    handleSubmit:Function,
-    width:string,
-  }
-  export type sideMenu = {
+export type buttonProps = {
+  children: any;
+  handleSubmit: Function;
+  width: string;
+};
+export type sideMenu = {
+  title?: string;
+  link?: string;
+};
+
+export interface Popup {
+  _id?: string;
+  show: boolean;
+  data?: {
+    container?: {
+      name?: string;
+      data?: any;
+      dimensions?: {
+        width?: string;
+        height?: string;
+      };
+    };
+    eventHandler?: (event: Event) => void;
     title?: string;
-    link?: string;
+    type?: "error" | "warning" | "notification" | "custom";
+    headerIcon?: string;
   };
-
-
-interface Event{
-    name:string,
-    data?:any,
-    triggerBy?:{
-        componentName?:string,
-        id?:string | number,
-    }
+}
+export interface Event {
+  name: string;
+  data?: any;
+  triggerBy?: {
+    componentName?: string;
+    id?: string | number;
+  };
 }
 
-interface Component<miscType,stateType>{
-    state?:stateType,
-    nonState?:{
-        id?:string | number,
-        structuralKey?:string|number,
-        eventHandler?:(event:Event)=>void,
-        exposedEvents?:string[],
-        initialValue?:any,
-        misc?:miscType
-    }
+interface Component<miscType, stateType> {
+  state?: stateType;
+  nonState?: {
+    id?: string | number;
+    structuralKey?: string | number;
+    eventHandler?: (event: Event) => void;
+    exposedEvents?: string[];
+    initialValue?: any;
+    misc?: miscType;
+  };
 }
 
-export interface Form{
-    fields:FormField[],
-    title?:string,
-    submitText?:string,
-    asynchronousSubmit:boolean
+export interface Form {
+  fields: FormField[];
+  title?: string;
+  submitText?: string;
+  asynchronousSubmit: boolean;
 }
 
-export interface FormField{
-    title:string,
-    container:Container,
-    initialValue?:string
+export interface FormField {
+  title: string;
+  container: Container;
+  initialValue?: string;
 }
 
-export interface FormContainer{
-    id:string,
-    state:'focus' | 'blur',
-    data:any
+export interface FormContainer {
+  id: string;
+  state: "focus" | "blur";
+  data: any;
 }
 
 // export interface Location{
 //     access:"denied"|"granted",
 //     coords?:{
 //         accuracy:number | null,
-//         altitude:number | null,	
+//         altitude:number | null,
 //         altitudeAccuracy:number | null	,
 //         heading:number | null,	//north is 0 degrees, east is 90 degrees, south is 180 degrees
 //         latitude:number	,
-//         longitude:number,	
+//         longitude:number,
 //         speed:number | null
-//     },	
+//     },
 //     timestamp?:number
 // }
 
-export interface Dropdown{
-    options:string[]
+export interface Dropdown {
+  options: string[];
 }
 
 // export interface Asynchronousbutton{
@@ -141,62 +157,62 @@ export interface Dropdown{
 //   selected:number
 // }
 
-export interface Listings_University{
-    location: {
-        country: string,
-        state: string,
-        city: string
-    },
-    currency: {
-        symbol: string,
-        code: string
-    },
-    _id: string,
-    ranking: {
-        _id: string,
-        rank: number,
-        source: string
-    }[],
-    name: string,
-    logoSrc: string,
-    type: string,
-    establishedYear: number,
-    cost:{
-        name: string,
-        lowerLimit: number,
-        upperLimit: number,
-        _id: string
-    } [],
-    courses: {
-        _id: string,
-        name: string
-    }[]
+export interface Listings_University {
+  location: {
+    country: string;
+    state: string;
+    city: string;
+  };
+  currency: {
+    symbol: string;
+    code: string;
+  };
+  _id: string;
+  ranking: {
+    _id: string;
+    rank: number;
+    source: string;
+  }[];
+  name: string;
+  logoSrc: string;
+  type: string;
+  establishedYear: number;
+  cost: {
+    name: string;
+    lowerLimit: number;
+    upperLimit: number;
+    _id: string;
+  }[];
+  courses: {
+    _id: string;
+    name: string;
+  }[];
 }
 
-export type ListItemState=any[]
+export type ListItemState = any[];
 
-export interface ListState{
-    list:any[],
-    isLoading?:boolean
+export interface ListState {
+  list: any[];
+  isLoading?: boolean;
 }
 
-export interface ListNonState{
-    containers:Container[],
-    containerDimensions?:Dimension,
-    mode:"list" | "swiper" | "verticalstack",
-    emptyListMessage?:string,
-    direction:"horizontal" | "vertical",
-    tabBar?:{
-        show?:boolean,
-        container:Container
-    },
-    gap?:number
+export interface ListNonState {
+  containers: Container[];
+  containerDimensions?: Dimension;
+  mode: "list" | "swiper" | "verticalstack";
+  emptyListMessage?: string;
+  direction: "horizontal" | "vertical";
+  tabBar?: {
+    show?: boolean;
+    container: Container;
+  };
+  gap?: number;
 }
 
-export interface Container{
-    id?:string,
-    component:FC<Component<any,any>>,
-    data?:any
+export interface Container {
+  id?: string;
+  component: FC<Component<any, any>>;
+  data?: any;
 }
 
 // export type TabState={index:Animated.Value}
@@ -211,147 +227,147 @@ export interface Container{
 //     index:number
 // }
 
-export interface Application{
-        _id: string,
-        university: {
-            location: {
-                country: string,
-                state: string,
-                city:string
-            },
-            _id: string,
-            name: string,
-            logoSrc: string,
-            type: string,
-            establishedYear: number
-        },
-        course: {
-            tuitionFee: {
-                tuitionFee: number,
-                tuitionFeeType: string
-            },
-            currency: {
-                symbol: string,
-                code: string
-            },
-            _id:string,
-            name: string,
-            subDiscipline: string,
-            schoolName: string,
-            discipline: string,
-            studyLevel:string,
-            duration: 12,
-            studyMode: string[],
-            startDate:{
-                _id: string,
-                courseStarting: string,
-                Deadline:string,
-                courseStartingMonth: number,
-                deadlineMonth: number
-            }[]
-        },
-        intake: string,
-        user: string,
-        processCoordinator: string,
-        counsellor: string,
-        cancellationRequest: boolean,
-        log: {
-            status: string,
-            stages: {
-                name: string,
-                updatedAt: string,
-                _id: string
-            }[],
-            _id: string
-        }[],
-        status:string,
-        stage: string,
-        docChecklist: {
-            name: "LOR",
-            isChecked: false,
-            doc: null,
-            _id: "6602d07af1472ae551619993"
-        }[],
-        createdAt: string,
-        updatedAt: string,
-        __v: number
+export interface Application {
+  _id: string;
+  university: {
+    location: {
+      country: string;
+      state: string;
+      city: string;
+    };
+    _id: string;
+    name: string;
+    logoSrc: string;
+    type: string;
+    establishedYear: number;
+  };
+  course: {
+    tuitionFee: {
+      tuitionFee: number;
+      tuitionFeeType: string;
+    };
+    currency: {
+      symbol: string;
+      code: string;
+    };
+    _id: string;
+    name: string;
+    subDiscipline: string;
+    schoolName: string;
+    discipline: string;
+    studyLevel: string;
+    duration: 12;
+    studyMode: string[];
+    startDate: {
+      _id: string;
+      courseStarting: string;
+      Deadline: string;
+      courseStartingMonth: number;
+      deadlineMonth: number;
+    }[];
+  };
+  intake: string;
+  user: string;
+  processCoordinator: string;
+  counsellor: string;
+  cancellationRequest: boolean;
+  log: {
+    status: string;
+    stages: {
+      name: string;
+      updatedAt: string;
+      _id: string;
+    }[];
+    _id: string;
+  }[];
+  status: string;
+  stage: string;
+  docChecklist: {
+    name: "LOR";
+    isChecked: false;
+    doc: null;
+    _id: "6602d07af1472ae551619993";
+  }[];
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 }
 
-export interface LoaderState{
-    gif:string ,
-    text?:string
+export interface LoaderState {
+  gif: string;
+  text?: string;
 }
 
-export interface NotificationsBannerState{
-    notifications:Notification[],
-    isLoading:boolean
+export interface NotificationsBannerState {
+  notifications: Notification[];
+  isLoading: boolean;
 }
 
-export type Notification={
-    id:string|number,
-    message:string,
-    image:string
+export type Notification = {
+  _id: string | number;
+  message: string;
+  image: string;
+};
+
+export interface UserStatus {
+  isAuthorized: boolean;
+  isRegistered: boolean;
+  role: "guest" | "student" | "developer" | "anonymous";
 }
 
-export interface UserStatus{
-   isAuthorized:boolean,
-   isRegistered:boolean,
-   role:"guest" | "student" | "developer" | "anonymous"
+export interface Error {
+  show: boolean;
+  message: string;
 }
 
-export interface Error{
-    show:boolean,
-    message:string
+export interface Dimension {
+  width?: number;
+  height?: number;
 }
 
-export interface Dimension{
-    width?:number,
-    height?:number
+export interface serverResponse {
+  success: boolean;
+  data: any;
+  message: string;
+  AccessToken?: string;
 }
 
-export interface serverResponse{
-    success:boolean,
-    data:any,
-    message:string,
-    AccessToken?:string
+export interface StoreItem<datatype> {
+  requestStatus: "not_initiated" | "initiated";
+  responseStatus: "recieved" | "not_recieved";
+  haveAnIssue: boolean;
+  issue: string;
+  data: datatype;
 }
 
-export interface StoreItem<datatype>{
-    requestStatus:"not_initiated" | "initiated",
-    responseStatus:"recieved" | "not_recieved",
-    haveAnIssue:boolean,
-    issue:string,
-    data:datatype
+export interface StoreAction<payloadType> {
+  type: "string";
+  payload: payloadType;
 }
 
-export interface StoreAction<payloadType>{
-    type:"string",
-    payload:payloadType
-}
-
-export interface Store{
-    workexperience:StoreItem<WorkExperience[]>,
-    skills:StoreItem<any>,
-    educationhistory:StoreItem<any>,
-    shortlistedcourses:StoreItem<ShortlistedCourse[]>,
-    recommendedcourses:StoreItem<any>,
-    chats:StoreItem<{advisors:Chat[],community:Chat[]}>,
-    messages:StoreItem<Message[]>,
-    profile:StoreItem<Profile>,
-    counsellorinfo:StoreItem<any>
-    testscores:StoreItem<any>,
-    preferences:StoreItem<any>,
-    applications:StoreItem<Application[]>,
-    documents:StoreItem<any>,
-    communityposts:StoreItem<any>,
-    communityfeed:StoreItem<any>,
-    communityjoined:StoreItem<any>,
-    counsellorbookedslots:StoreItem<any>,
-    userauthstatus:StoreItem<UserStatus>,
-    error:StoreItem<Error>,
-    notifications:StoreItem<Notification[]>,
-    userlocation:StoreItem<Location>
-    //event:StoreItem<Event|null>
+export interface Store {
+  workexperience: StoreItem<WorkExperience[]>;
+  skills: StoreItem<any>;
+  educationhistory: StoreItem<any>;
+  shortlistedcourses: StoreItem<ShortlistedCourse[]>;
+  recommendedcourses: StoreItem<any>;
+  chats: StoreItem<{ advisors: Chat[]; community: Chat[] }>;
+  messages: StoreItem<Message[]>;
+  profile: StoreItem<Profile>;
+  counsellorinfo: StoreItem<any>;
+  testscores: StoreItem<any>;
+  preferences: StoreItem<any>;
+  applications: StoreItem<Application[]>;
+  documents: StoreItem<any>;
+  communityposts: StoreItem<any>;
+  communityfeed: StoreItem<any>;
+  communityjoined: StoreItem<any>;
+  counsellorbookedslots: StoreItem<any>;
+  userauthstatus: StoreItem<UserStatus>;
+  error: StoreItem<Error>;
+  notifications: StoreItem<Notification[]>;
+  userlocation: StoreItem<Location>;
+  //event:StoreItem<Event|null>
 }
 
 // export interface BackendApi_Lib{
@@ -370,158 +386,158 @@ export interface Store{
 //     headers?:any
 // }
 
-export interface ShortlistedCourse{
-    university: {
-        location: {
-            country: string,
-            state:  string,
-            city:  string
-        },
-        _id:  string,
-        name: string,
-        logoSrc:  string,
-        type:  string,
-        establishedYear: number
-    },
-    course: {
-        tuitionFee: {
-            tuitionFee: number,
-            tuitionFeeType: string
-        },
-        currency: {
-            symbol:  string,
-            code:  string
-        },
-        _id:  string,
-        name:  string,
-        subDiscipline:  string,
-        schoolName: string,
-        discipline: string,
-        studyLevel:  string,
-        duration:  string,
-        studyMode: string [],
-        startDate: {
-            _id:  string,
-            courseStarting:  string,
-            Deadline:  string,
-            courseStartingMonth: number,
-            deadlineMonth: number
-        }[]
-    },
-    _id: string
-}
-
-export type chatParticipantActions="online" | "typing" | "offline" | "inchat"
-
-export interface Chat{
-    _id: string,
-    participants:Participant[],
-    admins: [],
-    unSeenMessages:{
-            message: {
-                _id: string,
-                sender: {
-                    _id: string,
-                    displayPicSrc: string,
-                    email: string,
-                    userType: string,
-                    firstName: string,
-                    lastName: string
-                },
-                content: string,
-                iv: string,
-                chat: string,
-                createdAt: string,
-                updatedAt: string,
-                __v:number
-            },
-            seen:string [],
-            _id: string
-        }[],
-    createdAt: string,
-    updatedAt: string,
-    __v: number,
-    lastMessage?: {
-        _id: string,
-        sender: string,
-        content: string,
-        iv: string,
-        chat: string,
-        createdAt:string,
-        updatedAt: string,
-        __v: number
-    }
-}
-
-export interface Participant{
-    _id: string,
-    displayPicSrc: string,
-    email: string,
-    userType: UserRoles,
-    firstName: string,
-    lastName: string,
-    activity:chatParticipantActions,
-    lastSeenMessageId?:string
-}
-
-export interface Message{
-    _id: string,
-    sender?: {
-        _id: string,
-        displayPicSrc: string,
-        email: string,
-        userType: string,
-        firstName: string,
-        lastName: string
-    },
-    content?:string,
-    iv?: string,
-    chat?: string,
-    createdAt?: string,
-    updatedAt?: string,
-    type:"seen" | "normal" | "typing"
-    __v?: number
-}
-
-export interface WorkExperience{
-    companyName:string,
-    sector:IndustryTypeEnum
-    type:WorkStyleEnum
-    startDate:string
-    endDate:string
-    _id:string
-}
-
-export interface UniversityListObj{
+export interface ShortlistedCourse {
+  university: {
     location: {
-        country:string,
-        state: string,
-        city: string
-    },
+      country: string;
+      state: string;
+      city: string;
+    };
+    _id: string;
+    name: string;
+    logoSrc: string;
+    type: string;
+    establishedYear: number;
+  };
+  course: {
+    tuitionFee: {
+      tuitionFee: number;
+      tuitionFeeType: string;
+    };
     currency: {
-        symbol: string,
-        code: string
-    },
-    _id: string,
-    name: string,
-    logoSrc: string,
-    type: string,
-    establishedYear: number,
-    ranking:{
-        _id: string,
-        rank: number,
-        source: string
-    }[],
-    cost: {
-        _id:string,
-        name: string,
-        lowerLimit: number,
-        upperLimit: number
-    }[],
-    courses: {
-        _id: string,
-        name:string
-    }[]
+      symbol: string;
+      code: string;
+    };
+    _id: string;
+    name: string;
+    subDiscipline: string;
+    schoolName: string;
+    discipline: string;
+    studyLevel: string;
+    duration: string;
+    studyMode: string[];
+    startDate: {
+      _id: string;
+      courseStarting: string;
+      Deadline: string;
+      courseStartingMonth: number;
+      deadlineMonth: number;
+    }[];
+  };
+  _id: string;
+}
+
+export type chatParticipantActions = "online" | "typing" | "offline" | "inchat";
+
+export interface Chat {
+  _id: string;
+  participants: Participant[];
+  admins: [];
+  unSeenMessages: {
+    message: {
+      _id: string;
+      sender: {
+        _id: string;
+        displayPicSrc: string;
+        email: string;
+        userType: string;
+        firstName: string;
+        lastName: string;
+      };
+      content: string;
+      iv: string;
+      chat: string;
+      createdAt: string;
+      updatedAt: string;
+      __v: number;
+    };
+    seen: string[];
+    _id: string;
+  }[];
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  lastMessage?: {
+    _id: string;
+    sender: string;
+    content: string;
+    iv: string;
+    chat: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  };
+}
+
+export interface Participant {
+  _id: string;
+  displayPicSrc: string;
+  email: string;
+  userType: UserRoles;
+  firstName: string;
+  lastName: string;
+  activity: chatParticipantActions;
+  lastSeenMessageId?: string;
+}
+
+export interface Message {
+  _id: string;
+  sender?: {
+    _id: string;
+    displayPicSrc: string;
+    email: string;
+    userType: string;
+    firstName: string;
+    lastName: string;
+  };
+  content?: string;
+  iv?: string;
+  chat?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  type: "seen" | "normal" | "typing";
+  __v?: number;
+}
+
+export interface WorkExperience {
+  companyName: string;
+  sector: IndustryTypeEnum;
+  type: WorkStyleEnum;
+  startDate: string;
+  endDate: string;
+  _id?: string;
+}
+
+export interface UniversityListObj {
+  location: {
+    country: string;
+    state: string;
+    city: string;
+  };
+  currency: {
+    symbol: string;
+    code: string;
+  };
+  _id: string;
+  name: string;
+  logoSrc: string;
+  type: string;
+  establishedYear: number;
+  ranking: {
+    _id: string;
+    rank: number;
+    source: string;
+  }[];
+  cost: {
+    _id: string;
+    name: string;
+    lowerLimit: number;
+    upperLimit: number;
+  }[];
+  courses: {
+    _id: string;
+    name: string;
+  }[];
 }
 
 // export interface FilterSelected{
@@ -535,187 +551,302 @@ export interface UniversityListObj{
 //     selectionType:"single"|"multi"
 // }
 
-export interface EducationHistory{
-    school: EducationHistory_School | undefined,
-    plus2:EducationHistory_Plus2 | undefined,
-    underGraduation: EducationHistory_UnderGraduation | undefined,
-    postGraduation:EducationHistory_PostGraduation | undefined,
+export interface EducationHistory {
+  school: EducationHistory_School | undefined;
+  plus2: EducationHistory_Plus2 | undefined;
+  underGraduation: EducationHistory_UnderGraduation | undefined;
+  postGraduation: EducationHistory_PostGraduation | undefined;
 }
 
-export interface EducationHistory_School{
-    instituteName:string,
-    city: string,
-    state: string,
-    country: string,
-    languageOfInstruction: string, // enum hindi telugu eng other
-    gradingSystem: string, // enum % grade gpa 
-    board: string,// enum 
-    totalScore: string, // for grade A+..., for Percent 0-100, gpa 0-10
-    startDate: Date,
-    endDate: Date,
+export interface EducationHistory_School {
+  instituteName: string;
+  city: string;
+  state: string;
+  country: string;
+  languageOfInstruction: string; // enum hindi telugu eng other
+  gradingSystem: string; // enum % grade gpa
+  board: string; // enum
+  totalScore: string; // for grade A+..., for Percent 0-100, gpa 0-10
+  startDate: Date;
+  endDate: Date;
 }
 
 export interface EducationHistory_Plus2 {
-    instituteName: string,
-    city: string,
-    state: string,
-    country: string,
-    languageOfInstruction: string, // enum hindi telugu eng other
-    gradingSystem: string, // enum % grade gpa 
-    board: string,// enum ISC, state, 
-    totalScore: string, // for grade A+..., for Percent 0-100, gpa 0-10
-    startDate: Date,
-    endDate: Date,
-    stream: string, // enum mpc,bipc,mec....
-    backlogs:number,
-    isCompleted: boolean
+  instituteName: string;
+  city: string;
+  state: string;
+  country: string;
+  languageOfInstruction: string; // enum hindi telugu eng other
+  gradingSystem: string; // enum % grade gpa
+  board: string; // enum ISC, state,
+  totalScore: string; // for grade A+..., for Percent 0-100, gpa 0-10
+  startDate: Date;
+  endDate: Date;
+  stream: string; // enum mpc,bipc,mec....
+  backlogs: number;
+  isCompleted: boolean;
 }
 
-export interface EducationHistory_UnderGraduation{
-    instituteName:string,
-    city: string,
-    state: string,
-    country: string,
-    programMajor: string,// enum  eee,ese,ece
-    degreeProgram: string,// enum btech,bedu,bsc.... 
-    gradingSystem: string,// enum % grade gpa cgpa
-    affiliatedUniversity: string,
-    totalScore:number, // for grade A+..., for Percent 0-100, gpa 0-10
-    startDate: Date,
-    endDate:Date,
-    backlogs:number,
-    isCompleted: boolean
+export interface EducationHistory_UnderGraduation {
+  instituteName: string;
+  city: string;
+  state: string;
+  country: string;
+  programMajor: string; // enum  eee,ese,ece
+  degreeProgram: string; // enum btech,bedu,bsc....
+  gradingSystem: string; // enum % grade gpa cgpa
+  affiliatedUniversity: string;
+  totalScore: number; // for grade A+..., for Percent 0-100, gpa 0-10
+  startDate: Date;
+  endDate: Date;
+  backlogs: number;
+  isCompleted: boolean;
 }
 
 export interface EducationHistory_PostGraduation {
-    instituteName:string,
-    city: string,
-    state: string,
-    country: string,
-    specialization: string,// enum  power and energy systems,computer engineering,data science
-    degreeProgram: string,// enum mtech,medu,msc.... 
-    gradingSystem: string,// enum % grade gpa cgpa
-    affiliatedUniversity: string,
-    totalScore:number, // for grade A+..., for Percent 0-100, gpa 0-10
-    startDate: Date,
-    endDate:Date,
-    backlogs:number,
-    isCompleted: boolean
+  instituteName: string;
+  city: string;
+  state: string;
+  country: string;
+  specialization: string; // enum  power and energy systems,computer engineering,data science
+  degreeProgram: string; // enum mtech,medu,msc....
+  gradingSystem: string; // enum % grade gpa cgpa
+  affiliatedUniversity: string;
+  totalScore: number; // for grade A+..., for Percent 0-100, gpa 0-10
+  startDate: Date;
+  endDate: Date;
+  backlogs: number;
+  isCompleted: boolean;
+}
+ export interface Preferences{
+    intake: string,
+    budget: {
+      upper: number,
+      lower: number,
+    },
+    degree: string,
+    country: string[],
+    courses: string[],
+ }
+export interface scoresArray{
+    description:string;
+    count:number
+}
+ export interface Test{
+     name:string;
+     scores:scoresArray[]
+ }
+ export interface ResearchPaper{
+
+ }
+ export interface Meeting{
+
+}
+export interface Verification{
+
 }
 
-export interface Profile{
-    _id:string,
-    personalDetails: Personalinfo,
-    familyDetails: {
-        GuardianFirstName: string,
-        GuardianLastName: string,
-        GuardianEmail: string,
-        GuardianOccupation: string,
-        GuardianQualification: string,
-        RelationshipWithStudent: string, // enum father, mother, spouse, guardian
-        GuardianContactNumber:{ 
-            countryCode: string, 
-            number: string 
-        },
-    }[],
-    emailVerified: boolean,
-    emailVerificationString: string,
-    emailVerificationExpiry:Date,
-    phoneVerified: boolean,
-    phoneVerificationExpiry: Date,
-    phoneOtp: string,
-    LeadSource: string,
-    counsellor: User,
-    processCoordinator: User,
-    visaExpert: User,
-    loanExpert:User,
-    isPlanningToTakeAcademicTest: boolean,
-    isPlanningToTakeLanguageTest: boolean,
+export interface Recommendation{
+    university: {
+      location: {
+        country: string;
+        state: string;
+        city: string;
+      };
+      _id: string;
+      name: string;
+      logoSrc: string;
+      type: string;
+      establishedYear: number;
+    };
+    course: {
+      tuitionFee: {
+        tuitionFee: number;
+        tuitionFeeType: string;
+      };
+      currency: {
+        symbol: string;
+        code: string;
+      };
+      _id: string;
+      name: string;
+      subDiscipline: string;
+      schoolName: string;
+      discipline: string;
+      studyLevel: string;
+      duration: string;
+      studyMode: string[];
+      startDate: {
+        _id: string;
+        courseStarting: string;
+        Deadline: string;
+        courseStartingMonth: number;
+        deadlineMonth: number;
+      }[];
+    };
+    _id: string;
+  }
+export interface Profile {
+  personalDetails: Personalinfo;
+  sharedInfo: Sharedinfo;
+  verification:Verification[],
+  familyDetails: FamilyInfo[];
+  advisors: {
+    _id: string;
+    info: User;
+    type: UserRoles;
+  }[];
+  skills: string[];
+  workExperience: [];
+  tests: Test[],
+  education: EducationHistory;
+  researchPapers: ResearchPaper[],
+  recommendation: Recommendation[],
+  documents: Documents;
+  activity: {
+    shortListed: ShortlistedCourse[];
+    applications: {
+      processing: Application[];
+      accepted: Application[];
+      rejected: Application[];
+      completed: Application[];
+      cancelled: Application[];
+    };
+    meetings: Meeting[]; //
+  };
+  preference: Preferences;
 }
-
-export interface Personalinfo{
-    firstName:string,
-    lastName:string,
-    displayPicSrc:string,
-    email:string,
-    DOB: Date,
-    Gender: string, // enum
-    phone: {
-        countryCode: string, 
-        number: string 
-    },
-    temporaryAddress: {
-        city: string,
-        state: string,
-        pinCode: number,
-        country: string,
-        addressLine1: string,
-        addressLine2: string,
-        addressLine3: string
-    },
-    permanentAddress: {
-        city: string,
-        state: string,
-        pinCode: number,
-        country: string,
-        addressLine1: string,
-        addressLine2: string,
-        addressLine3: string
-    },
-    nationality: string,// enum
-    countyOfBirth: string, // enum
-    maritalStatus: string, // enum 
-    validPassport: string,// enum yes no and processing
-    validPermit: string,// enum yes no and processing,
-    visaRejectedDetails: string,
+export interface Profile_Database {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  phone: Phone;
+  LeadSource: string;
+  isPlanningToTakeAcademicTest: boolean;
+  isPlanningToTakeLanguageTest: boolean;
+  email: string;
+  displayPicSrc?: string;
+  personalDetails: Personalinfo;
+  verification: Verification[];
+  familyDetails: FamilyInfo[];
+  advisors: {
+    _id: string;
+    info: User;
+    type: UserRoles;
+  }[];
+  skills: string[];
+  workExperience: [];
+  tests: Test[];
+  education: EducationHistory;
+  researchPapers: ResearchPaper[];
+  recommendation: Recommendation[];
+  documents: Documents;
+  activity: {
+    shortListed: ShortlistedCourse[];
+    applications: {
+      processing: Application[];
+      accepted: Application[];
+      rejected: Application[];
+      completed: Application[];
+      cancelled: Application[];
+    };
+    meetings: Meeting[]; //
+  };
+  preference: Preferences;
 }
+export interface Phone {
+  coundryCode: string;
+  number: number;
+}
+export interface Address {
+  city: string;
+  state: string;
+  pinCode: number;
+  country: string;
+  addressLine1: string;
+  addressLine2: string;
+  addressLine3: string;
+}
+export interface Personalinfo {
+  DOB?: string;
+  Gender?: string; // enum
+  temporaryAddress?: Address;
+  permanentAddress?: Address;
+  nationality?: string; // enum
+  countyOfBirth?: string; // enum
+  maritalStatus?: string; // enum
+  validPassport?: string; // enum yes no and processing
+  validPermit?: string; // enum yes no and processing,
+  visaRejectedDetails?: string;
+}
+export interface Sharedinfo {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  displayPicSrc: string;
+  email: string;
+  phone: Phone;
+  LeadSource: string;
+  isPlanningToTakeAcademicTest: boolean;
+  isPlanningToTakeLanguageTest: boolean;
+}
+export type FamilyInfo = {
+  GuardianFirstName: string;
+  GuardianLastName: string;
+  GuardianEmail: string;
+  GuardianOccupation: string;
+  GuardianQualification: string;
+  RelationshipWithStudent: string; // enum father, mother, spouse, guardian
+  GuardianContactNumber: Phone;
+  _id:number
+};
 
-export type UserRoles="student" | "guest" | "developer" | "member"
+export type UserRoles = "student" | "guest" | "developer" | "member";
 
 export interface User {
-    _id: string,
-    numberOfStudentsAssisted: number,
-    name:string,
-    displayPicSrc: string,
-    email: string,
-    userType: UserRoles
+  _id: string;
+  numberOfStudentsAssisted: number;
+  name: string;
+  displayPicSrc: string;
+  email: string;
+  userType: UserRoles;
 }
 
-export interface Document{
-    _id:string,
-    name: string,
-    contentType: string,
-    createdAt: string
-  }
+export interface Document {
+  _id: string;
+  name: string;
+  contentType: string;
+  createdAt: string;
+}
 
-export interface Documents{
-    test:{
-        languageProf:Document[]
-        general:Document[]
-    },
-    workExperiences:Document[],
-    personal:{
-        resume:Document
-        passportBD:Document
-        passportADD:Document
-    },
-    academic:{
-        degree:Document
-        secondarySchool:Document
-        plus2:Document
-        bachelors:{
-            transcripts:Document,
-            bonafide:Document,
-            CMM:Document,
-            PCM:Document,
-            OD:Document
-        }
-        masters:{
-            transcripts:Document,
-            bonafide:Document,
-            CMM:Document,
-            PCM:Document,
-            OD:Document
-        }
-    }
+export interface Documents {
+  test: {
+    languageProf: Document[];
+    general: Document[];
+  };
+  workExperiences: Document[];
+  personal: {
+    resume: Document;
+    passportBD: Document;
+    passportADD: Document;
+  };
+  academic: {
+    degree: Document;
+    secondarySchool: Document;
+    plus2: Document;
+    bachelors: {
+      transcripts: Document;
+      bonafide: Document;
+      CMM: Document;
+      PCM: Document;
+      OD: Document;
+    };
+    masters: {
+      transcripts: Document;
+      bonafide: Document;
+      CMM: Document;
+      PCM: Document;
+      OD: Document;
+    };
+  };
 }

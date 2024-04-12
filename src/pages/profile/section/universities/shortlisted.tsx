@@ -11,7 +11,7 @@ const Shortlisted = () => {
   const shortlistedCourses = useAppSelector(
     (state) => state.shortlistedcourses
   );
-
+console.log(shortlistedCourses)
   return (
     <div>
       <Grid container spacing={2}>

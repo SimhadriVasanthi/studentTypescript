@@ -16,8 +16,8 @@ const UserAuthStatusSlice = createSlice({
     name: 'userauthstatus',
     initialState: initialState,
     reducers: {
-        setUserAuthStatus: (state, action: PayloadAction<{ type: string, data: UserStatus }>) => {
-            state.data = action.payload.data;
+        setUserAuthStatus: (state, action: PayloadAction<UserStatus >) => {
+            state.data = action.payload;
         },
         initUserAuthStatus:(state,action)=>({...action.payload})
 }

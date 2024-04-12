@@ -1,3 +1,9 @@
+import ForgotPassword from "../components/authentication/forgotPassword";
+import Login from "../components/authentication/Login";
+import PhoneNumber from "../components/authentication/phoneNumber";
+import SignUp from "../components/authentication/Register";
+import Error from "../genericComponents/modalPopup/error";
+
 export const APP_NAME="Campus Root";
 export const DESTINATIONS={USA:"United States",UK:"United Kingdom",CAN:"Canada",AUS:"Australia",IRE:"Ireland",NZ:"New Zealand"};
 export const SOCKET_URL='https://onewindow-v1-server.onrender.com/';
@@ -8,6 +14,18 @@ export const TeamRoleEnum = {
     ADMIN: "admin",
     COUNSELLOR: "counsellor"
 }
+
+export const COMPONENTS = [
+    {name:"login",component:Login},
+    {name:"signup",component:SignUp},
+    {name:"forgot",component:ForgotPassword},
+    {name:"phonenumber",component:PhoneNumber},
+    {name:"error",component:Error},
+
+
+]
+
+
 
 export const UniversityTypeEnum = {
     PUBLIC: "public",

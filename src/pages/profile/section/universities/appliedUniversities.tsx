@@ -1,12 +1,16 @@
 import { Box, Divider, Grid, Stack, Typography } from "@mui/material";
 import CustomCard from "../../../../genericComponents/customCard";
-import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
+import WatchLaterIcon from "@mui/icons-material/WatchLater";
+import { useAppSelector } from "../../../../assets/hooks";
 
 const AppliedUniversities = () => {
+  const applicationsData = useAppSelector(state =>state.applications)
+  console.log(applicationsData)
+  
   return (
     <div>
       <Grid container>
-        <Grid item xs={12} sm={6} md={4}>
+        <Grid item xs={12} sm={6} lg={4}>
           <CustomCard handleSubmit={() => console.log("first")}>
             <Box>
               <Typography
@@ -48,43 +52,42 @@ const AppliedUniversities = () => {
                   {data.university.location.country} */}
                   Los Angeles, California
                 </Typography>
-                <Stack direction="row" sx={{ flexWrap: "wrap" }}>
-                  <Typography
-                    fontSize="0.8rem"
-                    color="#1F8659"
-                    fontWeight="600"
-                  >
-                    {/* {data.course.studyMode} */}
-                    M.Sc. | 2 years | $38,130 per year | online
-                  </Typography>
-                </Stack>
               </Stack>
             </Box>
-            <Divider />
-            <Box
-              sx={{
-                background: "#FFFAF4",
-                p: 1,
-                mt: 1,
-                borderRadius: "10px",
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <Box>
-                <Typography color="#3B3F76" fontSize="0.8rem">
-                  Intake : Dec 2025
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Stack direction="row" spacing={1}>
+                <Typography
+                  component="span"
+                  fontSize="0.8rem"
+                  fontWeight="500"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    whiteSpace: "nowrap",
+                  }} // Prevent line wrapping
+                >
+                  <WatchLaterIcon sx={{ color: "#72D4D1",fontSize:"1.25rem"  }} />
+                  &nbsp; Dec 2025
                 </Typography>
-                <Typography color="#C5A636" fontSize="0.8rem">
-                  Status : Processing
+                <Divider orientation="vertical" flexItem />
+                <Typography
+                  fontSize="0.8rem"
+                  fontWeight="500"
+                  sx={{ display: "flex", alignItems: "center" }}
+                >
+                  <WatchLaterIcon sx={{ color: "#72D4D1",fontSize:"1.25rem"  }} />
+                  &nbsp;Processing
                 </Typography>
-                <Typography fontSize="0.8rem">
-                  Stage : Waiting for counsellors{" "}
+                <Divider orientation="vertical" flexItem />
+                <Typography
+                  fontSize="0.8rem"
+                  fontWeight="500"
+                  sx={{ display: "flex", alignItems: "center" }}
+                >
+                  <WatchLaterIcon sx={{ color: "#72D4D1",fontSize:"1.25rem" }} />
+                  &nbsp; Waiting for counsellors
                 </Typography>
-              </Box>
-              <Box sx={{display:"flex",flexDirection:"column",justifyContent:"end"}}>
-              <AccessTimeOutlinedIcon />
-              </Box>
+              </Stack>
             </Box>
           </CustomCard>
         </Grid>

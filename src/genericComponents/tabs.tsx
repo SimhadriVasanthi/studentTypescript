@@ -79,7 +79,8 @@ const CustomTabs: React.FC<CustomTabsProps> = ({ tabs }) => {
             sx={{
               textTransform: 'none',
               fontSize: { sm: '1rem', xs: "14px" },
-              mb:2
+              mb:2,
+              mr:2
             }}
           />
         ))}

@@ -1,10 +1,10 @@
 import { Card } from "@mui/material";
-import { expandCardProps } from "../types/types";
+import { customCardProps } from "../types/types";
 
 export default function CustomCard({
   children,
   handleSubmit,
-}: expandCardProps) {
+}: customCardProps) {
   return (
     <>
       <Card
@@ -17,7 +17,7 @@ export default function CustomCard({
           cursor: "pointer",
           position: "relative",
           "&:hover": {
-            background: "#FFFAF4",
+            background: "rgba(59, 63, 118, 0.1)",
           },
         }}
         onClick={() => handleSubmit()}

@@ -9,7 +9,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import Images from "../../assets";
 import { Stack } from "@mui/material";
@@ -17,6 +16,10 @@ import { CustomButton } from "../../genericComponents/customButton";
 import { useNavigate } from "react-router-dom";
 import CustomModal from "../../genericComponents/modalPopup/customModal";
 import Authentication from "../authentication";
+import { Event } from "../../types/types";
+import { useAppDispatch, useAppSelector } from "../../assets/hooks";
+import { setUserAuthStatus } from "../../store/Slices/userAuthSlice";
+import { setPopup } from "../../store/Slices/popupSlice";
 
 const pages = [
   {
@@ -33,11 +36,22 @@ const pages = [
   },
 ];
 const settings = [
-  "Universities",
-  "Profile",
-  "Booked slots",
-  "Preferences",
-  "Documents",
+  {
+    title: "Universities",
+    link: "/profile/universities",
+  },
+  {
+    title: "Dashboard",
+    link: "/profile/dashboard",
+  },
+  {
+    title: "Profile",
+    link: "/profile/personal",
+  },
+  {
+    title: "Documents",
+    link: "/profile/documents",
+  },
 ];
 
 const Header = () => {
@@ -48,38 +62,61 @@ const Header = () => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
-  const [selectedPage, setSelectedPage] = React.useState<string>('');
-  // eslint-disable-next-line 
-  const [auth, setAuth] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
+  const [selectedPage, setSelectedPage] = React.useState<string>("");
+  const userAuthStatus = useAppSelector((state) => state.userAuthStatus);
+  const dispatch = useAppDispatch();
+  const eventHandler = (event: Event) => {
+    // console.log(JSON.stringify(event,null,2))
+    switch (event.name) {
+      case "OpenUserMenu":
+        setAnchorElUser(event.data);
+        break;
 
-  const handleCloseNavMenu = (link: string) => {
-    navigate(link);
-    setAnchorElNav(null);
-  };
+      case "OpenNavMenu":
+        setAnchorElNav(event.data);
+        break;
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+      case "CloseNavMenu":
+        navigate(event.data.link);
+        setAnchorElNav(null);
+        setSelectedPage(event.data.title);
+        break;
 
-  const handleOpenModal = () => {
-    setOpen(true);
-  };
+      case "CloseUserMenu":
+        navigate(event.data.link);
+        setAnchorElUser(null);
+        break;
 
-  const handleCloseModal = () => {
-    setOpen(false);
+      case "login":
+        dispatch(
+          setPopup({
+            show: true,
+            data: {
+              container: {
+                name: "login",
+                dimensions:{
+                  width:"500px"
+                }
+              },
+              type: "custom",
+            },
+          })
+        );
+        break;
+    }
   };
 
   return (
     <AppBar
-      position="static"
-      sx={{ "&.MuiAppBar-root ": { backgroundColor: "#fff", px: {xs:0,sm:5} , boxShadow: "0 2px 2px #3f5c6e26" } }}
+      position="sticky"
+      sx={{
+        top: 0,
+        "&.MuiAppBar-root ": {
+          backgroundColor: "#fff",
+          px: { xs: 0, sm: 5 },
+          boxShadow: "0 2px 2px #3f5c6e26",
+        },
+      }}
     >
       <Container maxWidth="xl">
         <Toolbar
@@ -95,20 +132,23 @@ const Header = () => {
             />
           </Stack>
           <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
-            <Stack direction="row" sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }} spacing={2}>
+            <Stack
+              direction="row"
+              sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}
+              spacing={2}
+            >
               {pages.map((page: any) => (
                 <Button
                   key={page}
                   onClick={() => {
-                    handleCloseNavMenu(page.link);
-                    setSelectedPage(page.title); 
+                    eventHandler({ name: "CloseNavMenu", data: page });
                   }}
                   sx={{
                     display: "block",
-                    color: page.title === selectedPage ? "#3B3F76" : "#000", 
+                    color: page.title === selectedPage ? "#3B3F76" : "#000",
                     textTransform: "capitalize",
                     fontSize: "1rem",
-                    fontWeight:page.title === selectedPage ? 600:500,
+                    fontWeight: page.title === selectedPage ? 600 : 500,
                   }}
                 >
                   {page.title}
@@ -116,17 +156,23 @@ const Header = () => {
               ))}
             </Stack>
             <Box sx={{ flexGrow: 0 }}>
-              {auth ? (
-                <Tooltip title="Open settings">
-                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar
-                      alt="Remy Sharp"
-                      src="/static/images/avatar/2.jpg"
-                    />
-                  </IconButton>
-                </Tooltip>
+              {userAuthStatus.data?.isAuthorized ? (
+                <IconButton
+                  onClick={(e) => {
+                    eventHandler({
+                      name: "OpenUserMenu",
+                      data: e.currentTarget,
+                    });
+                  }}
+                  sx={{ p: 0 }}
+                >
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton>
               ) : (
-                <CustomButton handleSubmit={handleOpenModal} width="100%">
+                <CustomButton
+                  handleSubmit={() => eventHandler({ name: "login" })}
+                  width="100%"
+                >
                   Login/Signin
                 </CustomButton>
               )}
@@ -145,11 +191,18 @@ const Header = () => {
                   horizontal: "right",
                 }}
                 open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
+                onClose={() => {
+                  eventHandler({ name: "CloseUserMenu", data: "" });
+                }}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
+                {settings.map((setting: any) => (
+                  <MenuItem
+                    key={setting}
+                    onClick={() => {
+                      eventHandler({ name: "CloseUserMenu", data: setting });
+                    }}
+                  >
+                    <Typography textAlign="center">{setting.title}</Typography>
                   </MenuItem>
                 ))}
               </Menu>
@@ -160,7 +213,9 @@ const Header = () => {
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
-                onClick={handleOpenNavMenu}
+                onClick={(e) => {
+                  eventHandler({ name: "OpenUserMenu", data: e.currentTarget });
+                }}
               >
                 <MenuIcon />
               </IconButton>
@@ -185,8 +240,10 @@ const Header = () => {
                 {pages.map((page: any) => (
                   <MenuItem
                     key={page}
-                    onClick={() => handleCloseNavMenu(page.link)}
-                    sx={{py:0,minHeight:"35px"}}
+                    onClick={() => {
+                      eventHandler({ name: "CloseNavMenu", data: page });
+                    }}
+                    sx={{ py: 0, minHeight: "35px" }}
                   >
                     <Typography textAlign="center">{page.title}</Typography>
                   </MenuItem>
@@ -196,13 +253,6 @@ const Header = () => {
           </Stack>
         </Toolbar>
       </Container>
-      <CustomModal
-        open={open}
-        handleClose={handleCloseModal}
-        additionalData={{ width: "500px" }}
-      >
-        <Authentication/>
-      </CustomModal>
     </AppBar>
   );
 };

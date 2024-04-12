@@ -26,7 +26,7 @@ const ConfirmDialog = ({
     <Box>
       <Dialog
         open={open || false}
-        onClose={handleClose()}
+        onClose={()=>handleClose ? handleClose() :null}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         sx={styles}

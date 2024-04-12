@@ -1,21 +1,23 @@
-import React, { useState } from "react";
-import ForgotPassword from "./forgotPassword";
+import React from "react";
+import { useAppSelector } from "../../assets/hooks";
 import Login from "./Login";
 import SignUp from "./Register";
 
 const Authentication = () => {
-  const [loginOrSignup, setLoginOrSignup] = useState("login");
-
   let componentToRender = null;
+  const userAuthStatus = useAppSelector((state) => state.userAuthStatus);
 
-  if (loginOrSignup === "login") {
-    componentToRender = <Login setLoginOrSignup={setLoginOrSignup} />;
-  } else if (loginOrSignup === "signup") {
-    componentToRender = <SignUp setLoginOrSignup={setLoginOrSignup} />;
-  } else if (loginOrSignup === "forgotPassword") {
-    componentToRender = <ForgotPassword setLoginOrSignup={setLoginOrSignup} />;
+  if (
+    !userAuthStatus.data.isAuthorized &&
+    userAuthStatus.data.role === "student"
+  ) {
+    componentToRender = <Login />;
+  } else if (
+    !userAuthStatus.data.isRegistered &&
+    userAuthStatus.data.role === "student"
+  ) {
+    componentToRender = <SignUp />;
   }
-
   return <div>{componentToRender}</div>;
 };
 

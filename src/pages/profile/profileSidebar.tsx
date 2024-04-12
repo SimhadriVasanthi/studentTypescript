@@ -5,14 +5,12 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { useLocation, Link } from "react-router-dom";
-import { ListItemIcon, Tooltip } from "@mui/material";
+import { ListItemIcon, Tooltip, useTheme } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import DescriptionIcon from "@mui/icons-material/Description";
-import EventIcon from "@mui/icons-material/Event";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import Person2Icon from "@mui/icons-material/Person2";
-import TuneIcon from "@mui/icons-material/Tune";
 
 const profileList = [
   {
@@ -21,23 +19,14 @@ const profileList = [
     icon: <AccountBalanceIcon />,
   },
   { path: "/profile/dashboard", name: "Dashboard", icon: <DashboardIcon /> },
-  {
-    path: "/profile/booked-sessions",
-    name: "Booked Sessions",
-    icon: <EventIcon />,
-  },
   { path: "/profile/personal", name: "Profile", icon: <Person2Icon /> },
-  {
-    path: "/profile/preferences",
-    name: "Preferences",
-    icon: <TuneIcon />,
-  },
   { path: "/profile/documents", name: "Documents", icon: <DescriptionIcon /> },
 ];
 
 const ProfileSidebar = () => {
   const location = useLocation();
-  const isMobile = useMediaQuery("(max-width:1000px)");
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
     <Box
@@ -45,11 +34,15 @@ const ProfileSidebar = () => {
         display: "flex",
         background: "#fff",
         boxShadow: 1,
-        mx: { xs: 0, sm: 5 },
+        mx: { xs: 0, md: 5 },
         my: 3,
-        width: {xs:"100px", md: "250px" },
+        width: { md: "220px" },
         borderRadius: "10px",
         height: "85vh",
+        justifyContent: "center",
+        // zIndex: 1200,
+        // position: "fixed",
+        // top: 0,
       }}
     >
       <Box
@@ -71,14 +64,17 @@ const ProfileSidebar = () => {
               <ListItemButton
                 selected={location.pathname === item.path}
                 sx={{
-                  fontWeight: 500,
+                  "&:hover": {
+                    background: "#fff",
+                  },
+                  color:"#3b3f7691",
                   "&.Mui-selected": {
                     // textAlign: "center",
                     borderRadius: "10px",
-                    background: "#3B3F76",
-                    color: "#fff",
+                    background: "#fff",
+                    color: "#3b3f76",
                     "&:hover": {
-                      background: "#3B3F76",
+                      background: "#fff",
                     },
                   },
                 }}
@@ -88,7 +84,7 @@ const ProfileSidebar = () => {
                     <ListItemIcon
                       sx={{
                         color:
-                          location.pathname === item.path ? "#fff" : "#000",
+                          location.pathname === item.path ? "#3b3f76" : "#3b3f7691",
                         minWidth: "40px",
                       }}
                     >
@@ -98,7 +94,7 @@ const ProfileSidebar = () => {
                 ) : (
                   <ListItemIcon
                     sx={{
-                      color: location.pathname === item.path ? "#fff" : "#000",
+                      color: location.pathname === item.path ? "#3b3f76" : "#3b3f7691",
                       minWidth: "40px",
                     }}
                   >
@@ -106,7 +102,11 @@ const ProfileSidebar = () => {
                   </ListItemIcon>
                 )}
 
-                {!isMobile ? <ListItemText primary={item.name} /> : null}
+                {!isMobile ? <ListItemText primary={item.name} sx={{
+                  "& .MuiTypography-root":{
+                    fontWeight: location.pathname === item.path ? 600:500 ,
+                  }
+                }}/> : null}
               </ListItemButton>
             </ListItem>
           ))}

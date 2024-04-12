@@ -34,3 +34,41 @@ export const deleteIcon = {
       "brightness(0) saturate(100%) invert(40%) sepia(100%) saturate(384%) hue-rotate(320deg) brightness(100%) contrast(96%)",
   },
 };
+
+export const expandCardStyles = {
+  cardCollapse: {
+    mb: 2,
+    cursor: "pointer",
+    boxShadow: 2,
+    borderRadius: "10px",
+    "&.MuiPaper-elevation1": {
+      color: "#000",
+      borderRadius: "0.625rem",
+      overflow: "hidden",
+      minWidth: "18.75rem",
+    },
+  },
+  cardImg:{
+    width: "40px", 
+    height: "40px", 
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: "50%", 
+
+  },
+  cardTitle: {
+    "&.MuiCardHeader-root": {
+      p: 1.5,
+    },
+    ".MuiTypography-root": {
+      fontSize: "1rem",
+      fontWeight: 500,
+    },
+  },
+  cardContent: {
+    "&.MuiCollapse-root": {
+      backgroundColor: "#fff",
+    },
+  },
+};

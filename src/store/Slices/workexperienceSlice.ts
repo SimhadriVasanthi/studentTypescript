@@ -6,7 +6,6 @@ let initialState:StoreItem<WorkExperience[]>={
     responseStatus:"not_recieved",
     haveAnIssue:false,
     issue:"",
-
     data:[]
 }
 export const workexperienceSlice=createSlice({

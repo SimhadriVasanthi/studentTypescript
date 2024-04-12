@@ -9,3 +9,50 @@ body {
   font-family: 'Inter', sans-serif !important;
 }
 
+.otpinput{
+  width:2rem;
+  height: 2rem;
+  text-align: center;
+  border-radius: 5px;
+}
+.react-tel-input .form-control{
+  width:100% !important;
+}
+::-webkit-scrollbar {
+  width: 4px; /* Adjust the width as needed */
+}
+
+/* WebKit (Chrome, Safari, Opera) */
+::-webkit-scrollbar-thumb {
+  background-color: #ccc; /* Color of the scrollbar thumb */
+  border-radius: 4px; /* Rounded corners */
+}
+
+/* Mozilla Firefox */
+::-moz-scrollbar {
+  width: 4px; /* Adjust the width as needed */
+}
+
+/* Mozilla Firefox */
+::-moz-scrollbar-thumb {
+  background-color: #ccc; /* Color of the scrollbar thumb */
+  border-radius: 4px; /* Rounded corners */
+}
+
+.underlined {
+  position: relative;
+  margin-right: 1rem;
+}
+.underlined:after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  height: 7px;
+  width: 100px;
+  border: solid 2px #FEB853;
+  border-color: #FEB853 transparent transparent transparent;
+  border-radius: 50% 50% 0 0;
+}
+
+
