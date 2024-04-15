@@ -13,7 +13,7 @@ import PdfPreview from "../pages/profile/section/documents/pdfView";
 import University from "../pages/university";
 
 export const getComponent = (id: string) => {
-  let index = COMPONENTS.findIndex((item) => item.name == id);
+  let index = COMPONENTS.findIndex((item) => item.name === id);
   return COMPONENTS[index].component;
 };
 
