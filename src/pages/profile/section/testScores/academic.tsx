@@ -12,20 +12,20 @@ import React, { useRef, useState } from "react";
 import { testScores } from "../../../../assets/menu";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { AcademicTestNamesEnum } from "../../../../assets/enums";
-import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
+// import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import { editProfile } from "../../../../services";
 import { useAppDispatch, useAppSelector } from "../../../../assets/hooks";
 import { settestScores } from "../../../../store/Slices/testScoresSlice";
 
 const AcademicTestForm: React.FC = () => {
   const dispatch = useAppDispatch();
-  const testscores = useAppSelector((state) => state.testscores);
+  // const testscores = useAppSelector((state) => state.testscores);
   const [selectedTest, setSelectedTest] = useState<string>("");
   const [scoreCounts, setScoreCounts] = useState<{
     [description: string]: string;
   }>({});
   const [tookTest, setTookTest] = useState<string>("");
-  const inputFileRef = useRef(null);
+  // const inputFileRef = useRef(null);
   const handleTestSelection = (event: SelectChangeEvent<string>) => {
     setSelectedTest(event.target.value);
   };

@@ -1,24 +1,18 @@
 import { Box, Card, Grid, Stack, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import { useAppSelector } from "../../assets/hooks";
 import { expandCardStyles } from "../../components/styles/customStyles";
 import { CustomButton } from "../../genericComponents/customButton";
-import CustomCard from "../../genericComponents/customCard";
-import { ShortlistedCourse } from "../../types/types";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
+// import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import Images from "../../assets";
 import { getAlllistings } from "../../services";
 
 const CoursesCard = () => {
-  const shortlistedCourses = useAppSelector(
-    (state) => state.shortlistedcourses
-  );
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCourses, setTotalCourses] = useState();
-  const [totalItems, setTotalItems] = useState(0);
+  // const [totalItems, setTotalItems] = useState(0);
   const [courses, setCourses] = useState([]);
 
   const isRequested = useRef(false);

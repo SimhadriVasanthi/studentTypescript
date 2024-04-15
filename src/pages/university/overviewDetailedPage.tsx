@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import React from "react";
 import CustomTabs from "../../genericComponents/tabs";
 import { UniversityListObj } from "../../types/types";

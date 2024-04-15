@@ -1,9 +1,8 @@
 import { Grid, List, ListItem, Rating, Stack} from "@mui/material";
 import Images from "../../assets";
 import React, { useState } from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import { Box,Typography } from '@mui/material';
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
-import { UniversityListObj } from "../../types/types";
 
 const About = ({data}:any) => {
   return (

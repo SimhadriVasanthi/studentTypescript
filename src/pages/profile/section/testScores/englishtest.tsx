@@ -11,10 +11,9 @@ import React, { useRef, useState } from "react";
 import { testScores } from "../../../../assets/menu";
 import { SelectChangeEvent } from "@mui/material/Select";
 import {
-  AcademicTestNamesEnum,
   ENglishTestNamesEnum,
 } from "../../../../assets/enums";
-import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
+// import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import { editProfile } from "../../../../services";
 import { useAppDispatch, useAppSelector } from "../../../../assets/hooks";
 import { settestScores } from "../../../../store/Slices/testScoresSlice";
@@ -28,7 +27,7 @@ const EnglishTestForm: React.FC = () => {
     [description: string]: string;
   }>({});
   const [tookTest, setTookTest] = useState<string>("");
-  const inputFileRef = useRef(null);
+  // const inputFileRef = useRef(null);
   const handleTestSelection = (event: SelectChangeEvent<string>) => {
     setSelectedTest(event.target.value);
   };

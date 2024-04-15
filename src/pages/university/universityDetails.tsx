@@ -1,5 +1,4 @@
 import { Box, Button, Typography } from "@mui/material";
-import Images from "../../assets";
 import { UniversityListObj } from "../../types/types";
 
 const UniversityDetails : React.FC<{ singleUniversityData: UniversityListObj }> = ({ singleUniversityData })  => {

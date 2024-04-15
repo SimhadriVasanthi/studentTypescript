@@ -7,7 +7,7 @@ import {
 import { CustomButton } from "../../genericComponents/customButton";
 import CustomCard from "../../genericComponents/customCard";
 import {  UniversityListObj } from "../../types/types";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
+// import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 
 const UniversityCourses : React.FC<{ singleUniversityData: UniversityListObj }> = ({ singleUniversityData })  => {
