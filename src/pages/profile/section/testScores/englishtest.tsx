@@ -123,7 +123,7 @@ const EnglishTestForm: React.FC = () => {
       {selectedTest && (
         <>
           <div>
-            <h3>{selectedTest}</h3>
+            <h4>{selectedTest}</h4>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               {mapScoresToTextFields()}
             </div>

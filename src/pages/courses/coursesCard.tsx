@@ -7,13 +7,13 @@ import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import Images from "../../assets";
 import { getAlllistings } from "../../services";
 
-const CoursesCard = () => {
+const CoursesCard : React.FC<{ setCourseId :any }> = ({ setCourseId }) => {
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCourses, setTotalCourses] = useState();
   // const [totalItems, setTotalItems] = useState(0);
-  const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState<any[]>([]); 
 
   const isRequested = useRef(false);
 
@@ -29,16 +29,23 @@ const CoursesCard = () => {
       setCourses(response.data.list);
       setTotalCourses(response.data.totalItems);
       setTotalPages(response.data.totalPages);
+    }else{
+      console.log(response.data.message)
     }
   };
 
   useEffect(() => {
     if (!isRequested.current) {
       courseListings();
-
       isRequested.current = true;
     }
   }, []);
+
+  useEffect(() => {
+    if (courses?.length > 0) {
+      setCourseId(courses?.[0]?._id);
+    }
+  }, [courses]);
 
   return (
     <div>
@@ -57,11 +64,11 @@ const CoursesCard = () => {
           {courses && courses?.length > 0 && (
             <>
               {courses?.map((item: any, i: number) => (
-                <Grid item xs={12}>
+                <Grid item xs={12} key={item._id}>
                   <Card
                     sx={{
                       boxShadow: 0,
-                      background:"#F7F7F7",
+                      background: "#F7F7F7",
                       p: 2,
                       borderRadius: "0.625rem",
                       mb: 1,
@@ -72,6 +79,7 @@ const CoursesCard = () => {
                         border: "1px solid #3B3F76",
                       },
                     }}
+                    onClick={() => setCourseId(item._id)}
                   >
                     <Box>
                       <Typography
@@ -206,7 +214,8 @@ const CoursesCard = () => {
                   </Card>
                 </Grid>
               ))}
-            </> )}
+            </>
+          )}
         </Grid>
       </Box>
     </div>

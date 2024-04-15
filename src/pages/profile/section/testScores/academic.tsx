@@ -19,11 +19,13 @@ import { settestScores } from "../../../../store/Slices/testScoresSlice";
 
 const AcademicTestForm: React.FC = () => {
   const dispatch = useAppDispatch();
-  // const testscores = useAppSelector((state) => state.testscores);
+  const testscoresData = useAppSelector((state) => state.testscores);
   const [selectedTest, setSelectedTest] = useState<string>("");
+
   const [scoreCounts, setScoreCounts] = useState<{
     [description: string]: string;
   }>({});
+
   const [tookTest, setTookTest] = useState<string>("");
   // const inputFileRef = useRef(null);
   const handleTestSelection = (event: SelectChangeEvent<string>) => {
@@ -72,7 +74,7 @@ const AcademicTestForm: React.FC = () => {
         {selectedTestScores.map((score, index) => (
           <Grid item key={index} xs={12} sm={4} md={3}>
             <div>
-              <Typography fontWeight="500">{score.description}</Typography>
+              <Typography fontWeight="500" >{score.description}</Typography>
               <TextField
                 type="number"
                 size="small"
@@ -121,7 +123,7 @@ const AcademicTestForm: React.FC = () => {
       {selectedTest && (
         <>
           <div>
-            <h3>{selectedTest}</h3>
+            <h4>{selectedTest}</h4>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               {mapScoresToTextFields()}
             </div>

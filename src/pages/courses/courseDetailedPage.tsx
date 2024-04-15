@@ -1,10 +1,11 @@
 import { Box, Button, Divider, Grid, Stack, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Images from "../../assets";
 import CustomTabs from "../../genericComponents/tabs";
+import { getSingleCourse } from "../../services";
 
-const About = () => {
+const About = ({ data }: any) => {
   return (
     <div style={{ marginBottom: "2rem" }}>
       <Typography
@@ -17,27 +18,26 @@ const About = () => {
         About
       </Typography>
       <Typography fontSize="15px" sx={{ mt: 2 }}>
-        The Computer Science master's degree at Full Sail University enables
-        students to cultivate advanced software development skills. In this
-        program, you will expand upon previous programming knowledge by
-        developing your own software application through a project-based
-        curriculum that is structured around the real-world development life
-        cycle.
+        {data}
       </Typography>
     </div>
   );
 };
-const Details = () => {
-    const navigate = useNavigate();
+const Details = ({ data }: any) => {
+  const navigate = useNavigate();
 
-    const handleNavigateToUniversity = (id:string) => {
-      navigate(`/university/${id}`);
-    };
+  const handleNavigateToUniversity = (id: string) => {
+    navigate(`/university/${id}`);
+  };
   return (
     <>
       <Box sx={{ boxShadow: 1, borderRadius: "10px", p: 2 }}>
         <Stack direction="row" sx={{ alignItems: "center" }} spacing={5}>
-          <img src={Images.Climate} alt="logo" />
+          <img
+            src={data?.university?.logoSrc}
+            alt="logo"
+            style={{ borderRadius: "10px" }}
+          />
           <Box>
             <Typography
               fontWeight="600"
@@ -47,16 +47,22 @@ const Details = () => {
                 textTransform: "none",
               }}
             >
-              {/* {item.course.name} */}
-              Master of Integrated Innovation for Products & Services
+              {data?.name}
             </Typography>
             <Typography fontSize="0.9rem">
-            <span style={{ color: "#1B5FE3", cursor: "pointer" }} onClick={() => handleNavigateToUniversity("65784e2b67bb511e46ddd05c")}>
-              University of Southern California 
+              <span
+                style={{ color: "#1B5FE3", cursor: "pointer" }}
+                onClick={() =>
+                  handleNavigateToUniversity(data?.university?._id)
+                }
+              >
+                {data?.university?.name}
               </span>
-              &nbsp; | 
-              New York university Tandon
-              school of Engineering |US
+              <span style={{ color: "#848586" }}>
+                &nbsp; | {data?.university?.location?.city} ,{" "}
+                {data?.university?.location?.state} |{" "}
+                {data?.university?.location?.country}
+              </span>
             </Typography>
             <Button
               sx={{
@@ -65,6 +71,10 @@ const Details = () => {
                 textTransform: "none",
                 mt: 2,
                 fontSize: "16px",
+                "&:hover": {
+                  background: "#FEB853",
+                  color: "#fff",
+                },
               }}
             >
               Apply now
@@ -95,7 +105,7 @@ const Details = () => {
             md={2}
             xs={12}
           >
-            <Typography fontWeight="600">24 months</Typography>
+            <Typography fontWeight="600">{data?.duration} months</Typography>
             <Typography color="#848586" fontSize="12px">
               Duration
             </Typography>
@@ -111,7 +121,7 @@ const Details = () => {
             md={2}
             xs={12}
           >
-            <Typography fontWeight="600">24 months</Typography>
+            <Typography fontWeight="600">{data?.studyLevel}</Typography>
             <Typography color="#848586" fontSize="12px">
               Course level
             </Typography>
@@ -128,7 +138,7 @@ const Details = () => {
             md={2}
             xs={12}
           >
-            <Typography fontWeight="600">24 months</Typography>
+            <Typography fontWeight="600">{data?.studyMode}</Typography>
             <Typography color="#848586" fontSize="12px">
               Study mode
             </Typography>
@@ -145,7 +155,10 @@ const Details = () => {
             md={3}
             xs={12}
           >
-            <Typography fontWeight="600">24 months</Typography>
+            <Typography fontWeight="600">
+              {data?.tuitionFee?.tuitionFee} /{" "}
+              {data?.tuitionFee?.tuitionFeeType}
+            </Typography>
             <Typography color="#848586" fontSize="12px">
               Fees
             </Typography>
@@ -219,7 +232,23 @@ const tabs = [
   },
 ];
 
-const CourseDetailedPage = () => {
+const CourseDetailedPage: React.FC<{ courseId: string }> = ({ courseId }) => {
+  const [singleCourseData, setSingleCourseData] = useState<any | null>(null);
+  const singleCourse = async () => {
+    const response = await getSingleCourse(courseId, "INR");
+    if (response) {
+      console.log(response);
+      setSingleCourseData(response?.data?.data);
+    } else {
+      console.log("Error");
+    }
+  };
+  useEffect(() => {
+    if (courseId !== "") {
+      singleCourse();
+    }
+  }, [courseId]);
+
   return (
     <div>
       <Box
@@ -232,8 +261,8 @@ const CourseDetailedPage = () => {
           mt: 4,
         }}
       >
-        <Details />
-        <About />
+        <Details data={singleCourseData} />
+        <About data={singleCourseData?.about} />
         <CustomTabs tabs={tabs} />
       </Box>
     </div>
