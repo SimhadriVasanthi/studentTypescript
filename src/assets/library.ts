@@ -95,7 +95,7 @@ export const checkUser = async () => {
         responseStatus: "recieved",
         haveAnIssue: false,
         issue: "",
-        data: profileRes.data?.workexperience,
+        data: profileRes.data?.workExperience,
       }));
       dispatch(initskills({
         requestStatus: "initiated",

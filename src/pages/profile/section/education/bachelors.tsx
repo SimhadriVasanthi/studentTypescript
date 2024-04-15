@@ -16,8 +16,13 @@ import { DestinationTypeEnum } from "../../../../assets/enums";
 import CustomField from "../../../../genericComponents/customTextfield";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { bachelors } from "../../../../assets/menu";
+import { editProfile } from "../../../../services";
+import { useAppDispatch } from "../../../../assets/hooks";
+import { setUnderGraduation } from "../../../../store/Slices/educationHistorySlice";
 
-const Bachelors = () => {
+const Bachelors = ({ data }: any) => {
+  const dispatch = useAppDispatch();
+  const [Isbacklog,setIsbacklog] = useState()
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const MenuProps = {
@@ -28,27 +33,30 @@ const Bachelors = () => {
       },
     },
   };
-
   const initialValues = {
     underGraduation: {
-      instituteName: "",
-      city: "",
-      state: "",
-      country: "",
-      programMajor: "", // enum  eee,ese,ece
-      degreeProgram: "", // enum btech,bedu,bsc....
-      gradingSystem: "", // enum % grade gpa cgpa
-      affiliatedUniversity: "",
-      totalScore: "", // for grade A+..., for Percent 0-100, gpa 0-10
-      startDate: "",
-      endDate: "",
-      backlogs: "",
-      isCompleted: "",
+      instituteName: data?.instituteName,
+      city: data?.city,
+      state: data?.state,
+      country: data?.country,
+      programMajor: data?.programMajor, // enum  eee,ese,ece
+      degreeProgram:data?.degreeProgram, // enum btech,bedu,bsc....
+      gradingSystem: data?.gradingSystem, // enum % grade gpa cgpa
+      affiliatedUniversity: data?.affiliatedUniversity,
+      totalScore: data?.totalScore, // for grade A+..., for Percent 0-100, gpa 0-10
+      startDate: data?.startDate,
+      endDate: data?.endDate,
+      backlogs: data?.backlogs,
+      isCompleted: data?.isCompleted,
     },
   };
 
   const submit = async (values: any) => {
-    console.log(values);
+    const response = await editProfile(values);
+    console.log(response);
+    if (response) {
+      dispatch(setUnderGraduation(response.data.data.education.underGraduation));
+    }
   };
   return (
     <div>
@@ -266,7 +274,7 @@ const Bachelors = () => {
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
-                  <InputLabel id="" sx={{ color: "#000" ,fontWeight:600}}>
+                  <InputLabel id="" sx={{ color: "#000", fontWeight: 600 }}>
                     Education status
                   </InputLabel>
                   <FormControl>
@@ -278,7 +286,7 @@ const Bachelors = () => {
                       onChange={handleChange}
                     >
                       <FormControlLabel
-                        value="yes"
+                        value="true"
                         control={
                           <Radio
                             size="small"
@@ -292,7 +300,7 @@ const Bachelors = () => {
                         label="Completed"
                       />
                       <FormControlLabel
-                        value="no"
+                        value="false"
                         control={
                           <Radio
                             size="small"
@@ -375,13 +383,13 @@ const Bachelors = () => {
                     type="date"
                     placeholder="Attended From"
                     name="underGraduation.startDate"
-                    value={values.underGraduation.startDate}
+                    value={values?.underGraduation?.startDate?.slice(0,10)}
                     onChange={handleChange}
                     fullWidth
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  {values.underGraduation.isCompleted === "yes" && (
+                  {values.underGraduation?.isCompleted === "true" ? (
                     <>
                       <InputLabel
                         id="instituteName"
@@ -402,7 +410,7 @@ const Bachelors = () => {
                         }}
                       />
                     </>
-                  )}
+                  ) : null}
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <InputLabel id="" sx={{ color: "#000" }}>
@@ -412,9 +420,9 @@ const Bachelors = () => {
                     <RadioGroup
                       row
                       aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="underGraduation.backlogs"
-                      value={values.underGraduation.backlogs}
-                      onChange={handleChange}
+                      // name="underGraduation.backlogs"
+                      value={values.underGraduation.backlogs? "yes":"no"}
+                      onChange={(e:any) =>setIsbacklog(e.target.value)}
                     >
                       <FormControlLabel
                         value="yes"
@@ -447,6 +455,21 @@ const Bachelors = () => {
                     </RadioGroup>
                   </FormControl>
                 </Grid>
+                {Isbacklog === "yes" ? <Grid item xs={12} sm={6}>
+                 <InputLabel id="" sx={{ color: "#000" }}>
+                  Number of Backlogs
+                 </InputLabel>
+                 <CustomField
+                   id="name"
+                   type="number"
+                   placeholder="Attended From"
+                   name="underGraduation.backlogs"
+                   value={values.underGraduation.backlogs}
+                   onChange={handleChange}
+                   fullWidth
+                 />
+               </Grid> : null}
+                
                 <Grid item xs={12} sm={6}>
                   <InputLabel
                     id="instituteName"
@@ -556,7 +579,7 @@ const Bachelors = () => {
                     {Object.entries(DestinationTypeEnum).map(([key, value]) => (
                       <MenuItem
                         key={key}
-                        value={key}
+                        value={value}
                         sx={{
                           "& .MuiTypography-root": {
                             fontSize: "14px !important",

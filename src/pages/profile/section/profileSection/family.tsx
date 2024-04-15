@@ -12,6 +12,10 @@ import {
 import Images from "../../../../assets";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { CustomButton } from "../../../../genericComponents/customButton";
+import { useAppDispatch, useAppSelector } from "../../../../assets/hooks";
+import { editProfile } from "../../../../services";
+import { setfamilyInfo } from "../../../../store/Slices/familyInfoSlice";
+import { Event } from "../../../../types/types";
 
 interface FamilyMember {
   GuardianFirstName: string;
@@ -23,30 +27,22 @@ interface FamilyMember {
 }
 
 const Family = () => {
-  const [familyDetails, setFamilyDetails] = useState<FamilyMember[]>([
-    {
-      GuardianFirstName: "",
-      GuardianLastName: "",
-      GuardianEmail: "",
-      GuardianOccupation: "",
-      GuardianQualification: "",
-      RelationshipWithStudent: "",
-    },
-  ]);
-
-  const addFamilyMember = () => {
-    setFamilyDetails([
-      ...familyDetails,
-      {
-        GuardianFirstName: "",
-        GuardianLastName: "",
-        GuardianEmail: "",
-        GuardianOccupation: "",
-        GuardianQualification: "",
-        RelationshipWithStudent: "",
-      },
-    ]);
-  };
+  const familyData = useAppSelector((state) => state.familyInfo);
+  const dispatch = useAppDispatch();
+  const [familyDetails, setFamilyDetails] = useState<FamilyMember[]>(
+    familyData.data
+      ? familyData.data
+      : [
+          {
+            GuardianFirstName: "",
+            GuardianLastName: "",
+            GuardianEmail: "",
+            GuardianOccupation: "",
+            GuardianQualification: "",
+            RelationshipWithStudent: "",
+          },
+        ]
+  );
 
   const handleInputChange = (
     index: number,
@@ -58,15 +54,43 @@ const Family = () => {
     setFamilyDetails(newFamilyDetails);
   };
 
-  const removeFamilyMember = (index: number) => {
-    const newFamilyDetails = [...familyDetails];
-    newFamilyDetails.splice(index, 1);
-    setFamilyDetails(newFamilyDetails);
+  const eventHandler = (event: Event) => {
+    switch (event.name) {
+      case "addFamilyMember":
+        setFamilyDetails([
+          ...familyDetails,
+          {
+            GuardianFirstName: "",
+            GuardianLastName: "",
+            GuardianEmail: "",
+            GuardianOccupation: "",
+            GuardianQualification: "",
+            RelationshipWithStudent: "",
+          },
+        ]);
+        break;
+      case "removeFamilyMember":
+        const newFamilyDetails = [...familyDetails];
+        newFamilyDetails.splice(event.data, 1);
+        setFamilyDetails(newFamilyDetails);
+        break;
+      case "inputChange":
+        const { name, value } = event.data.e;
+        console.log(event.data,{ name, value })
+        const newDetails = [...familyDetails];
+        newDetails[event.data.index][name as keyof FamilyMember] = value; // type assertion to avoid TypeScript error
+        setFamilyDetails(newDetails);
+    }
   };
-  
-  const submitForm = () => {
-    console.log(familyDetails);
-    // Perform form submission logic here
+
+  const submitForm = async () => {
+    let family = {
+      familyDetails: familyDetails,
+    };
+    const response = await editProfile(family);
+    if (response) {
+      dispatch(setfamilyInfo(response.data.data.familyDetails));
+    }
   };
   return (
     <div>
@@ -84,7 +108,12 @@ const Family = () => {
                 displayEmpty
                 defaultValue=""
                 value={familyMember.RelationshipWithStudent}
-                onChange={(e: any) => handleInputChange(index, e)}
+                onChange={(e: any) =>
+                  eventHandler({
+                    name: "inputChange",
+                    data: { index, e },
+                  })
+                }
                 fullWidth
                 IconComponent={ExpandMoreIcon}
               >
@@ -133,7 +162,12 @@ const Family = () => {
                 name={`GuardianFirstName`}
                 placeholder="Guardian First Name"
                 value={familyMember.GuardianFirstName}
-                onChange={(e: any) => handleInputChange(index, e)}
+                onChange={(e: any) =>
+                  eventHandler({
+                    name: "inputChange",
+                    data: { index, e },
+                  })
+                }
                 required
                 fullWidth
               />
@@ -147,7 +181,12 @@ const Family = () => {
                 name={`GuardianLastName`}
                 placeholder="Guardian Last Name"
                 value={familyMember.GuardianLastName}
-                onChange={(e: any) => handleInputChange(index, e)}
+                onChange={() =>
+                  eventHandler({
+                    name: "inputChange",
+                    data: { index },
+                  })
+                }
                 required
                 fullWidth
               />
@@ -162,7 +201,12 @@ const Family = () => {
                 name={`GuardianEmail`}
                 placeholder="Guardian Email"
                 value={familyMember.GuardianEmail}
-                onChange={(e: any) => handleInputChange(index, e)}
+                onChange={(e: any) =>
+                  eventHandler({
+                    name: "inputChange",
+                    data: { index, e },
+                  })
+                }
                 required
                 fullWidth
               />
@@ -176,7 +220,12 @@ const Family = () => {
                 name={`GuardianOccupation`}
                 placeholder="Guardian Occupation"
                 value={familyMember.GuardianOccupation}
-                onChange={(e: any) => handleInputChange(index, e)}
+                onChange={(e: any) =>
+                  eventHandler({
+                    name: "inputChange",
+                    data: { index, e },
+                  })
+                }
                 required
                 fullWidth
               />
@@ -190,7 +239,12 @@ const Family = () => {
                 name={`GuardianQualification`}
                 placeholder="Guardian Qualification"
                 value={familyMember.GuardianQualification}
-                onChange={(e: any) => handleInputChange(index, e)}
+                onChange={(e: any) =>
+                  eventHandler({
+                    name: "inputChange",
+                    data: { index, e },
+                  })
+                }
                 required
                 fullWidth
               />
@@ -202,7 +256,9 @@ const Family = () => {
                   <img
                     src={Images.deleteIcon}
                     alt="delete"
-                    onClick={() => removeFamilyMember(index)}
+                    onClick={() =>
+                      eventHandler({ name: "removeFamilyMember", data: index })
+                    }
                   />
                 </Box>
               </Grid>
@@ -215,7 +271,10 @@ const Family = () => {
         sx={{ mt: 5, mb: 1, display: "flex", justifyContent: "end" }}
         spacing={2}
       >
-        <CustomButton handleSubmit={() => addFamilyMember()} width="100px">
+        <CustomButton
+          handleSubmit={() => eventHandler({ name: "addFamilyMember" })}
+          width="100px"
+        >
           Add new
         </CustomButton>
         <Button

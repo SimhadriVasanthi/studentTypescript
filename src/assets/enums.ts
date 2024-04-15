@@ -41,7 +41,8 @@ export const DestinationTypeEnum = {
     CANADA: "Canada",
     AUSTRALIA: "Australia",
     IRELAND: "Ireland",
-    NZ: "New Zealand"
+    NZ: "New Zealand",
+    IN:"India"
 }
 export const CurrencyEnum = {
     USD: "United States Dollar",
@@ -82,12 +83,16 @@ export const TernaryEnum={
     OPTIONAL:"optional"
 }
 
-export const TestNamesEnum = {
+export const AcademicTestNamesEnum = {
     GRE: "Graduate Record Examination",
     GMAT: "Graduate Management Admission Test",
+    // ACT: "American College Testing"
+};
+export const ENglishTestNamesEnum = {
     TOEFL: "Test of English as a Foreign Language",
     IELTS: "International English Language Testing System",
     DET: "Duolingo English Test",
+    PTE: "Pearson Test of English",
 };
 
 export const TestDescriptionEnum = {

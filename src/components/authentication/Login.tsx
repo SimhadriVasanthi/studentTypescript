@@ -11,12 +11,13 @@ import React, { useState } from "react";
 import Images from "../../assets";
 import { useAppDispatch } from "../../assets/hooks";
 import { CustomButton } from "../../genericComponents/customButton";
-import { authenticateLogin } from "../../services";
+import { authenticateLogin, googleCodeAuthentication } from "../../services";
 import { loginProps } from "../../types/types";
 import * as Yup from "yup";
 import CustomField from "../../genericComponents/customTextfield";
 import { closePopup, setPopup } from "../../store/Slices/popupSlice";
 import { checkUser } from "../../assets/library";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -51,8 +52,35 @@ const Login = () => {
     } else {
     }
   };
-console.log(loading);
 
+  const GoogleLoginComponent = () => {
+    // useGoogleLogin hook to initiate Google login
+    const login = async (credentialResponse:any) => {
+      if (credentialResponse.credential) {
+        const response = await googleCodeAuthentication({
+          credential: credentialResponse.credential,
+        });
+        if (response) {
+          localStorage.setItem("_auth", response?.data?.data?.AccessToken);
+          checkUser();
+          dispatch(closePopup());
+        }
+      }
+    };
+
+    return (
+      <GoogleOAuthProvider clientId="1043194767197-e8jd2rqaqugqqss9jrnckus0s79dlcb5.apps.googleusercontent.com">
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            login(credentialResponse); // send this as body to /google/login
+          }}
+          onError={() => {
+            console.log("Login Failed");
+          }}
+        />
+      </GoogleOAuthProvider>
+    );
+  };
   return (
     <Box>
       <Box sx={{ px: 5 }}>
@@ -153,13 +181,31 @@ console.log(loading);
                   </Link>
                 </Grid>
                 <Grid item xs={12}>
-                  <CustomButton handleSubmit={()=>console.log("clicked")} width="100%">
+                  <CustomButton
+                    handleSubmit={() => console.log("clicked")}
+                    width="100%"
+                  >
                     {loading ? (
-                      <img src={Images.standardLoader} alt="load" style={{width:"20px",height:"20px",padding:"5px"}}/>
+                      <img
+                        src={Images.standardLoader}
+                        alt="load"
+                        style={{
+                          width: "20px",
+                          height: "20px",
+                          padding: "5px",
+                        }}
+                      />
                     ) : (
                       "Login"
                     )}
                   </CustomButton>
+                  
+                </Grid>
+                <Grid item xs={12} sx={{width:"100%" }}>
+                <h4 style={{textAlign:"center",margin:"0.625rem" }}>Or</h4>
+                  <Box sx={{ mb: 1,width:"100%",display:"flex",justifyContent:"center" }}>
+                    <GoogleLoginComponent />
+                  </Box>
                 </Grid>
                 <Grid item xs={12} sx={{ textAlign: "center" }}>
                   <Typography

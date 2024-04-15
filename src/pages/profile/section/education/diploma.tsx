@@ -15,9 +15,14 @@ import React, { useState } from "react";
 import { DestinationTypeEnum } from "../../../../assets/enums";
 import CustomField from "../../../../genericComponents/customTextfield";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { bachelors, diplomaCourses } from "../../../../assets/menu";
+import { editProfile } from "../../../../services";
+import { setPlus2 } from "../../../../store/Slices/educationHistorySlice";
+import { useAppDispatch } from "../../../../assets/hooks";
+import { diplomaCourses } from "../../../../assets/menu";
 
-const Diploma = () => {
+const Plus2 = ({data}:any) => {
+  const dispatch = useAppDispatch();
+  const [Isbacklog,setIsbacklog] = useState()
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const MenuProps = {
@@ -31,24 +36,27 @@ const Diploma = () => {
 
   const initialValues = {
     plus2: {
-      instituteName: "",
-      city: "",
-      state: "",
-      country: "",
-      languageOfInstruction: "",
-      gradingSystem: "", // enum % grade gpa cgpa
-      board: "",
-      stream: "",
-      totalScore: "", // for grade A+..., for Percent 0-100, gpa 0-10
-      startDate: "",
-      endDate: "",
-      backlogs: "",
-      isCompleted: "",
+      instituteName:data?.instituteName,
+      city:data?.city,
+      state:data?.state,
+      country:data?.country,
+      languageOfInstruction:data?.languageOfInstruction,
+      gradingSystem:data?.gradingSystem, // enum % grade gpa cgpa
+      board:data?.board,
+      stream:data?.stream,
+      totalScore:data?.totalScore, // for grade A+..., for Percent 0-100, gpa 0-10
+      startDate:data?.startDate,
+      endDate:data?.endDate,
+      backlogs:data?.backlogs,
+      isCompleted:data?.isCompleted,
     },
   };
 
   const submit = async (values: any) => {
-    console.log(values);
+    const response = await editProfile(values);
+  if (response) {
+    dispatch(setPlus2(response.data.data.education.plus2));
+  }
   };
   return (
     <div>
@@ -125,7 +133,7 @@ const Diploma = () => {
                       onChange={handleChange}
                     >
                       <FormControlLabel
-                        value="yes"
+                        value="true"
                         control={
                           <Radio
                             size="small"
@@ -139,7 +147,7 @@ const Diploma = () => {
                         label="Completed"
                       />
                       <FormControlLabel
-                        value="no"
+                        value="false"
                         control={
                           <Radio
                             size="small"
@@ -309,7 +317,7 @@ const Diploma = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  {values.plus2.isCompleted === "yes" && (
+                  {values.plus2.isCompleted === "true" ?(
                     <>
                       <InputLabel
                         id="instituteName"
@@ -330,7 +338,7 @@ const Diploma = () => {
                         }}
                       />
                     </>
-                  )}
+                  ): null}
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <InputLabel
@@ -386,48 +394,62 @@ const Diploma = () => {
                   </Select>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <InputLabel id="" sx={{ color: "#000" }}>
-                    Backlogs
-                  </InputLabel>
-                  <FormControl>
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="plus2.backlogs"
-                      value={values.plus2.backlogs}
-                      onChange={handleChange}
-                    >
-                      <FormControlLabel
-                        value="yes"
-                        control={
-                          <Radio
-                            size="small"
-                            sx={{
-                              "&.MuiRadio-root.Mui-checked": {
-                                color: "#3B3F76 !important",
-                              },
-                            }}
-                          />
-                        }
-                        label="Yes"
-                      />
-                      <FormControlLabel
-                        value="no"
-                        control={
-                          <Radio
-                            size="small"
-                            sx={{
-                              "&.MuiRadio-root.Mui-checked": {
-                                color: "#3B3F76 !important",
-                              },
-                            }}
-                          />
-                        }
-                        label="No"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </Grid>
+                <InputLabel id="" sx={{ color: "#000" }}>
+                  Backlogs
+                </InputLabel>
+                <FormControl>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    // name="underGraduation.backlogs"
+                    value={values.plus2.backlogs? "yes":"no"}
+                    onChange={(e:any) =>setIsbacklog(e.target.value)}
+                  >
+                    <FormControlLabel
+                      value="yes"
+                      control={
+                        <Radio
+                          size="small"
+                          sx={{
+                            "&.MuiRadio-root.Mui-checked": {
+                              color: "#3B3F76 !important",
+                            },
+                          }}
+                        />
+                      }
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value="no"
+                      control={
+                        <Radio
+                          size="small"
+                          sx={{
+                            "&.MuiRadio-root.Mui-checked": {
+                              color: "#3B3F76 !important",
+                            },
+                          }}
+                        />
+                      }
+                      label="No"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </Grid>
+              {Isbacklog === "yes" ? <Grid item xs={12} sm={6}>
+               <InputLabel id="" sx={{ color: "#000" }}>
+                Number of Backlogs
+               </InputLabel>
+               <CustomField
+                 id="name"
+                 type="number"
+                 placeholder="Attended From"
+                 name="plus2.backlogs"
+                 value={values.plus2.backlogs}
+                 onChange={handleChange}
+                 fullWidth
+               />
+             </Grid> : null}
                 <Grid item xs={12} sm={6}>
                   <InputLabel
                     id="instituteName"
@@ -587,4 +609,4 @@ const Diploma = () => {
   );
 };
 
-export default Diploma;
+export default Plus2;

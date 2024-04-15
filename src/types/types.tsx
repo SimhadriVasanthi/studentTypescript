@@ -30,7 +30,6 @@ export type initialData = {
   data: any;
 };
 export type customCardProps = {
-  handleSubmit: Function;
   children: React.ReactNode;
 };
 
@@ -501,9 +500,10 @@ export interface Message {
 
 export interface WorkExperience {
   companyName: string;
-  sector: IndustryTypeEnum;
-  type: WorkStyleEnum;
+  sector: string;
+  type: string;
   startDate: string;
+  designation:string;
   endDate: string;
   _id?: string;
 }
@@ -686,6 +686,13 @@ export interface Recommendation{
     };
     _id: string;
   }
+  export interface Applications {
+    processing: Application[];
+      accepted: Application[];
+      rejected: Application[];
+      completed: Application[];
+      cancelled: Application[];
+  }
 export interface Profile {
   personalDetails: Personalinfo;
   sharedInfo: Sharedinfo;
@@ -743,19 +750,13 @@ export interface Profile_Database {
   documents: Documents;
   activity: {
     shortListed: ShortlistedCourse[];
-    applications: {
-      processing: Application[];
-      accepted: Application[];
-      rejected: Application[];
-      completed: Application[];
-      cancelled: Application[];
-    };
+    applications: Applications;
     meetings: Meeting[]; //
   };
   preference: Preferences;
 }
 export interface Phone {
-  coundryCode: string;
+  countryCode: string;
   number: number;
 }
 export interface Address {

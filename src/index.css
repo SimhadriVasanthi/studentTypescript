@@ -42,17 +42,38 @@ body {
 .underlined {
   position: relative;
   margin-right: 1rem;
+  margin-bottom: 1rem;
 }
 .underlined:after {
   content: "";
   position: absolute;
   bottom: -10px;
-  left: 0;
+  left: 50%; /* Center the underline */
+  transform: translateX(-50%); /* Move the underline back by half of its width */
   height: 7px;
-  width: 100px;
-  border: solid 2px #FEB853;
+  width: 50px;
+  border: solid 3px #FEB853;
   border-color: #FEB853 transparent transparent transparent;
   border-radius: 50% 50% 0 0;
 }
+
+.pdfCard .react-pdf__Page__canvas{
+  width: 80% !important;
+  height: auto !important;
+  margin: 10% !important;
+  border-width: 1px;
+  border-style: solid;
+  }
+  .pdfCard{
+      cursor: pointer;
+      background-color: #E6E6E6 !important
+      ;
+  }
+  .Example__container__document .react-pdf__Document{
+      box-shadow: 10px 10px 20px #aaaaaa;
+  }
+  .pdfCard .react-pdf__Page{
+background-color: #E6E6E6 !important;
+  }
 
 

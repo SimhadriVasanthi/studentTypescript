@@ -57,6 +57,10 @@ const CustomTabs: React.FC<CustomTabsProps> = ({ tabs }) => {
           "& .MuiTabs-root":{
             display:"inline-block !important"
           },
+          "& .MuiTab-root.Mui-selected":{
+             borderBottom:"2px solid #3B3F76 !important",
+             color:"#3B3F76 !important"
+          },
           "& .MuiTabs-scroller": {
             overflowX: "scroll !important",
             "&::-webkit-scrollbar": {
@@ -67,7 +71,7 @@ const CustomTabs: React.FC<CustomTabsProps> = ({ tabs }) => {
               borderRadius: "8px",
             },
             "&::-webkit-scrollbar-track": {
-            //   backgroundColor: "#fff",
+              // backgroundColor: "#3B3F76",
             },
           }
         }, activeTab]}

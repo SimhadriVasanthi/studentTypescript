@@ -60,14 +60,14 @@ export const sendOTPEndPoint = () => {
     return `/student/add-to-short-list`;
   };
 
-  export const deleteShortListEndPoint = (id:number) => {
+  export const deleteShortListEndPoint = (id:string) => {
     return `/student/edit-short-list/${id}`;
   };  
   
   export const uploadProfileEndPoint = () => {
     return `/student/upload-profile`;
   }
-  export const getUploadProfileEndPoint = (id:number) => {
+  export const getUploadProfileEndPoint = (id:string) => {
     return `/student/download-profile/${id}`;
   }
   export const deleteUploadProfileEndPoint = () => {
@@ -77,7 +77,7 @@ export const sendOTPEndPoint = () => {
     return `/student/upload-application`;
   }
   
-  export const getUploadApplicationDocsEndPoint = (id:number) => {
+  export const getUploadApplicationDocsEndPoint = (id:string) => {
     return `/student/download-application/${id}`;
   }
   export const getRecommendationsEndpoint = () => {
@@ -87,7 +87,7 @@ export const sendOTPEndPoint = () => {
     return `/student/delete-uploaded-application`;
   }
   
-  export const cancellationRequestEndPoint = (applicationId:number) =>{
+  export const cancellationRequestEndPoint = (applicationId:string) =>{
     return `/student/request-cancellation/${applicationId}`;
   }
   
@@ -95,7 +95,7 @@ export const sendOTPEndPoint = () => {
     return `/student/apply`;
   };
   
-  export const editShortListEndPoint = (itemId:number) => {
+  export const editShortListEndPoint = (itemId:string) => {
     return `/student/edit-short-list/${itemId}`;
   };
   
@@ -103,7 +103,7 @@ export const sendOTPEndPoint = () => {
     return `/student/add-to-cart`;
   };
   
-  export const editCartEndPoint = (itemId:number) => {
+  export const editCartEndPoint = (itemId:string) => {
     return `/student/edit-cart/${itemId}`;
   };
   
@@ -111,7 +111,7 @@ export const sendOTPEndPoint = () => {
     return `/student/checkout`;
   };
 
-  export const participantProfileEndPoint = (id:number) => {
+  export const participantProfileEndPoint = (id:string) => {
     return `/student/single-student/${id}`;
   };
   
@@ -148,11 +148,11 @@ export const sendOTPEndPoint = () => {
     return `/communication/my-activity`;
   }
 
-  export const fetchPostsCommunityEndPoint = (communityId:number) =>{
+  export const fetchPostsCommunityEndPoint = (communityId:string) =>{
     return `/communication/community-posts/${communityId}`;
   }
 
-  export const singlePostEndPoint = (postId:number) =>{
+  export const singlePostEndPoint = (postId:string) =>{
     return `/communication/single-post/${postId}`;
   }
 
@@ -181,7 +181,7 @@ export const sendOTPEndPoint = () => {
     return `/public/all_destinations`;
   };
   
-  export const singleDestinationEndPoint = (countryId:number) => {
+  export const singleDestinationEndPoint = (countryId:string) => {
     return `/public/single_destination/${countryId}`;
   };
   
@@ -189,11 +189,11 @@ export const sendOTPEndPoint = () => {
     return `/public/listings/universities`;
   };
   
-  export const singleUniversityEndpoint = (universityId:number,currency:string) => {
+  export const singleUniversityEndpoint = (universityId:string,currency:string) => {
     return `/public/single_university/?id=${universityId}&currency=${currency}`;
   };
   
-  export const singleCourceEndpoint = (courceId:number,currency:string) => {
+  export const singleCourceEndpoint = (courceId:string,currency:string) => {
     return `/public/single_course/?id=${courceId}&currency=${currency}`;
     // return `/public/single_course/${courceId}/${currency}`;
 
@@ -230,16 +230,16 @@ export const sendOTPEndPoint = () => {
     return `communication/?search=${string}`;
   };
   
-  export const chatDocsDownloadEndPoint = (id:number) =>{
+  export const chatDocsDownloadEndPoint = (id:string) =>{
     return `/communication/download-document/${id}`;
   }
-  export const fetchAllMsgsEndPoint = (chatId:number) => {
+  export const fetchAllMsgsEndPoint = (chatId:string) => {
     return `communication/message/${chatId}`;
   };
-  export const postRetriveChatEndPoint = (studentId:number) => {
+  export const postRetriveChatEndPoint = (studentId:string) => {
     return `/communication/chats/${studentId}`;
   };
-  export const seenEndPoint = (roomid:number) => {
+  export const seenEndPoint = (roomid:string) => {
     return `/communication/seen/${roomid}`;
   };
 

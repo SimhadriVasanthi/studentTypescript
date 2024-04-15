@@ -15,9 +15,12 @@ import {
   import { DestinationTypeEnum } from "../../../../assets/enums";
   import CustomField from "../../../../genericComponents/customTextfield";
   import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-  import { bachelors } from "../../../../assets/menu";
+import { useAppDispatch } from "../../../../assets/hooks";
+import { editProfile } from "../../../../services";
+import { setSchool } from "../../../../store/Slices/educationHistorySlice";
   
-  const School = () => {
+  const School = ({data}:any) => {
+    const dispatch = useAppDispatch();
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
     const MenuProps = {
@@ -31,23 +34,25 @@ import {
   
     const initialValues = {
       school: {
-        instituteName: "",
-        city: "",
-        state: "",
-        country: "",
-        languageOfInstruction: "",
-        gradingSystem: "", // enum % grade gpa cgpa
-        board: "",
-        totalScore: "", // for grade A+..., for Percent 0-100, gpa 0-10
-        startDate: "",
-        endDate: "",
-        isCompleted: "",
-        
+        instituteName:data?.instituteName,
+        city:data?.city,
+        state:data?.state,
+        country:data?.country,
+        languageOfInstruction:data?.languageOfInstruction,
+        gradingSystem:data?.gradingSystem, // enum % grade gpa cgpa
+        board:data?.board,
+        totalScore:data?.totalScore, // for grade A+..., for Percent 0-100, gpa 0-10
+        startDate:data?.startDate,
+        endDate:data?.endDate,
+        isCompleted:data?.isCompleted,
       },
     };
   
     const submit = async (values: any) => {
-      console.log(values);
+      const response = await editProfile(values);
+      if(response){
+        dispatch(setSchool(response.data.data.education.school))
+      }
     };
     return (
       <div>
@@ -305,7 +310,7 @@ import {
                       type="date"
                       placeholder="Attended From"
                       name="school.startDate"
-                      value={values.school.startDate}
+                      value={values.school.startDate?.slice(0,10)}
                       onChange={handleChange}
                       fullWidth
                     />

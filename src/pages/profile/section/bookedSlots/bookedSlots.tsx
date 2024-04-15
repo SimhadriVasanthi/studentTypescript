@@ -37,6 +37,7 @@ const BookedSlots = () => {
       borderRadius: "10px",
       boxShadow: 1,
       height: "81vh",
+      overflowY:"scroll",
       p: 2,
     }}>
       <CustomTabs tabs={tabs}/>

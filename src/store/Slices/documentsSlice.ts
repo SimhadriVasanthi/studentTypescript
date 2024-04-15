@@ -60,8 +60,9 @@ export const documentsSlice=createSlice({
                 delete temp[action.payload.pathArray[action.payload.pathArray.length-1]]
             }
         },
+        setDocuments:(state,action:PayloadAction<Documents>)=>{state.data=action.payload},
     }
 })
 
-export const {initDocuments,addDocument,removeDocument}=documentsSlice.actions;
+export const {initDocuments,addDocument,removeDocument,setDocuments}=documentsSlice.actions;
 export default documentsSlice.reducer;

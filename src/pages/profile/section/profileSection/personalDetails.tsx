@@ -12,61 +12,270 @@ import {
   Typography,
 } from "@mui/material";
 import { Form, Formik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DestinationTypeEnum } from "../../../../assets/enums";
 import CustomField from "../../../../genericComponents/customTextfield";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import WorkExperience from "./workExperience";
-import CustomModal from "../../../../genericComponents/modalPopup/customModal";
-import PhoneNumber from "../../../../components/authentication/phoneNumber";
-import { useAppSelector } from "../../../../assets/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../assets/hooks";
+import { setPopup } from "../../../../store/Slices/popupSlice";
+import { Country, State, City } from "country-state-city";
+import { Event } from "../../../../types/types";
+import { editProfile } from "../../../../services";
+import { setSharedInfo } from "../../../../store/Slices/sharedInfoSlice";
+import { setPersonalInfo } from "../../../../store/Slices/personalInfoSlice";
+interface ICountry {
+  name: string;
+  isoCode: string;
+}
 
+interface IState {
+  name: string;
+  isoCode: string;
+  countryCode: string;
+}
+
+interface ICity {
+  name: string;
+  stateCode: string;
+  countryCode: string;
+}
 const PersonalDetails = () => {
+  const dispatch = useAppDispatch();
   const [refused, setRefused] = useState("");
-  const [permanent, setPermanent] = useState();
-  const [open, setOpen] = useState(false);
+  const [permanent, setPermanent] = useState("");
   const personalInfo = useAppSelector((state) => state.personalInfo);
   const sharedInfo = useAppSelector((state) => state.sharedInfo);
-  console.log(personalInfo, sharedInfo);
-  const initialValues = {
-    firstName: "",
-    lastName: "",
-    personalDetails: {
-      DOB: "",
-      Gender: "",
-      nationality: "",
-      countyOfBirth: "",
-      maritalStatus: "",
-      validPassport: "",
-      validPermit: "",
-      visaRejectedDetails: "",
-      temporaryAddress: {
-        city: "",
-        state: "",
-        pinCode: "",
-        country: "",
-        addressLine1: "",
-        addressLine2: "",
-        addressLine3: "",
-      },
-      permanentAddress: {
-        city: "",
-        state: "",
-        pinCode: "",
-        country: "",
-        addressLine1: "",
-        addressLine2: "",
-        addressLine3: "",
+  const [countries, setCountries] = useState<ICountry[]>([]);
+  const [states, setStates] = useState<IState[]>([]);
+  const [cities, setCities] = useState<ICity[]>([]);
+  const [permanentstates, setpermanentstates] = useState<IState[]>([]);
+  const [permanentcities, setpermanentCities] = useState<ICity[]>([]);
+  const [selectedCountry, setSelectedCountry] = useState(
+    personalInfo?.data?.temporaryAddress?.country
+  );
+  const [selectedState, setSelectedState] = useState(
+    personalInfo?.data?.temporaryAddress?.state
+  );
+  const [selectedCity, setSelectedCity] = useState(
+    personalInfo?.data?.temporaryAddress?.city
+  );
+  const [permanentCountry, setPermanentCountry] = useState(
+    personalInfo?.data?.permanentAddress?.country
+  );
+  const [permanentState, setpermanentState] = useState(
+    personalInfo?.data?.permanentAddress?.state
+  );
+  const [permanentCity, setpermanentCity] = useState(
+    personalInfo?.data?.permanentAddress?.city
+  );
+
+  const ITEM_HEIGHT = 78;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 220,
       },
     },
   };
-  const submit = async (values: any) => {
-    console.log(values);
+  const countryInfo = countries.find((c: any) => c.name === selectedCountry);
+  const stateInfo = states.find((s: any) => s.name === selectedState);
+  const countryPInfo = countries.find((c: any) => c.name === permanentCountry);
+  const stateInPfo = states.find((s: any) => s.name === permanentState);
+  useEffect(() => {
+    const fetchCountries = async () => {
+      const allCountries = await Country.getAllCountries();
+      setCountries(allCountries);
+    };
+
+    fetchCountries();
+  }, []);
+
+  useEffect(() => {
+    const fetchStateAndCities = async () => {
+      const statesOfCountry = await State.getStatesOfCountry(
+        countryInfo?.isoCode
+      );
+      setStates(statesOfCountry);
+
+      const citiesOfState = await City.getCitiesOfState(
+        stateInfo?.countryCode ?? "",
+        stateInfo?.isoCode ?? ""
+      );
+      setCities(citiesOfState);
+    };
+    fetchStateAndCities();
+  }, [countryInfo, stateInfo]);
+
+  useEffect(() => {
+    const fetchStateAndCities = async () => {
+      const statesOfCountry = await State.getStatesOfCountry(
+        countryPInfo?.isoCode
+      );
+      setpermanentstates(statesOfCountry);
+
+      const citiesOfState = await City.getCitiesOfState(
+        stateInPfo?.countryCode ?? "",
+        stateInPfo?.isoCode ?? ""
+      );
+      setpermanentCities(citiesOfState);
+    };
+    fetchStateAndCities();
+  }, [countryPInfo, stateInPfo]);
+
+  const eventHandler = async (event: Event) => {
+    switch (event.name) {
+      case "temporaryCountry":
+        setSelectedCountry(event.data);
+        const countryInfo = countries.find((c: any) => c.name === event.data);
+        if (countryInfo) {
+          const statesOfCountry = await State.getStatesOfCountry(
+            countryInfo.isoCode
+          );
+          setStates(statesOfCountry);
+        }
+        break;
+      case "temporaryState":
+        setSelectedState(event.data);
+        const stateInfo = states.find((s: any) => s.name === event.data);
+        if (stateInfo) {
+          const citiesOfState = await City.getCitiesOfState(
+            stateInfo?.countryCode,
+            stateInfo?.isoCode
+          );
+          setCities(citiesOfState);
+        }
+        break;
+      case "temporaryCity":
+        setSelectedCity(event.data);
+        break;
+      case "permanentCountry":
+        setPermanentCountry(event.data);
+        const countryPInfo = countries.find((c: any) => c.name === event.data);
+        if (countryPInfo) {
+          const statesOfCountry = await State.getStatesOfCountry(
+            countryPInfo.isoCode
+          );
+          setpermanentstates(statesOfCountry);
+        }
+        break;
+      case "permanentState":
+        setpermanentState(event.data);
+        const statePInfo = states.find((s: any) => s.name === event.data);
+        if (statePInfo) {
+          const citiesOfState = await City.getCitiesOfState(
+            statePInfo?.countryCode,
+            statePInfo?.isoCode
+          );
+          setpermanentCities(citiesOfState);
+        }
+        break;
+      case "permanentCity":
+        setpermanentCity(event.data);
+        break;
+    }
   };
 
-  const handleContact = () => {
-    setOpen(true);
+  const initialValues = {
+    firstName: sharedInfo?.data?.firstName,
+    lastName: sharedInfo?.data?.lastName,
+    personalDetails: {
+      DOB: personalInfo?.data?.DOB,
+      Gender: personalInfo?.data?.Gender,
+      nationality: personalInfo?.data?.nationality,
+      countyOfBirth: personalInfo?.data?.countyOfBirth,
+      maritalStatus: personalInfo?.data?.maritalStatus,
+      validPassport: personalInfo?.data?.validPassport,
+      validPermit: personalInfo?.data?.validPermit,
+      visaRejectedDetails: personalInfo?.data?.visaRejectedDetails,
+      temporaryAddress: {
+        city: selectedCity,
+        state: selectedState,
+        pinCode: personalInfo?.data?.temporaryAddress?.pinCode,
+        country: selectedCountry,
+        addressLine1: personalInfo?.data?.temporaryAddress?.addressLine1,
+        addressLine2: personalInfo?.data?.temporaryAddress?.addressLine2,
+        addressLine3: personalInfo?.data?.temporaryAddress?.addressLine3,
+      },
+      permanentAddress: {
+        city: permanentCity,
+        state: permanentState,
+        pinCode: personalInfo?.data?.permanentAddress?.pinCode,
+        country: permanentCountry,
+        addressLine1: personalInfo?.data?.permanentAddress?.addressLine1,
+        addressLine2: personalInfo?.data?.permanentAddress?.addressLine2,
+        addressLine3: personalInfo?.data?.permanentAddress?.addressLine3,
+      },
+    },
   };
+
+  useEffect(() => {
+    const tempAddress = initialValues.personalDetails.temporaryAddress;
+    const permAddress = initialValues.personalDetails.permanentAddress;
+
+    if (
+      tempAddress.city === permAddress.city &&
+      tempAddress.state === permAddress.state &&
+      tempAddress.pinCode === permAddress.pinCode &&
+      tempAddress.country === permAddress.country &&
+      tempAddress.addressLine1 === permAddress.addressLine1 &&
+      tempAddress.addressLine2 === permAddress.addressLine2 &&
+      tempAddress.addressLine3 === permAddress.addressLine3
+    ) {
+      setPermanent("yes");
+    } else {
+      setPermanent("no");
+    }
+  }, []);
+
+  const submit = async (values: any) => {
+    if (permanent === "yes") {
+      values.personalDetails.permanentAddress = {
+        ...values.personalDetails.temporaryAddress,
+      };
+    }
+    const response = await editProfile(values);
+    if (response.data.success) {
+      const sharedProfile = {
+        _id: response.data?.data?._id,
+        firstName: response.data?.data?.firstName,
+        lastName: response.data?.data?.lastName,
+        displayPicSrc: response.data?.data?.displayPicSrc,
+        email: response.data?.data?.email,
+        phone: response.data?.data?.phone,
+        LeadSource: response.data?.data?.LeadSource,
+        isPlanningToTakeAcademicTest:
+          response.data?.data?.isPlanningToTakeAcademicTest,
+        isPlanningToTakeLanguageTest:
+          response.data?.data?.isPlanningToTakeLanguageTest,
+      };
+      const personalInfo = {
+        DOB: response.data?.data?.personalDetails.DOB,
+        Gender: response.data?.data?.personalDetails.Gender, // enum
+        temporaryAddress: response.data?.data?.personalDetails.temporaryAddress,
+        permanentAddress: response.data?.data?.personalDetails.permanentAddress,
+        nationality: response.data?.data?.personalDetails.nationality, // enum
+        countyOfBirth: response.data?.data?.personalDetails.countyOfBirth, // enum
+        maritalStatus: response.data?.data?.personalDetails.maritalStatus, // enum
+        validPassport: response.data?.data?.personalDetails.validPassport, // enum yes no and processing
+        validPermit: response.data?.data?.personalDetails.validPermit, // enum yes no and processing,
+        visaRejectedDetails:
+          response.data?.data?.personalDetails.visaRejectedDetails,
+      };
+      dispatch(
+        setSharedInfo({
+          ...sharedProfile,
+        })
+      );
+      dispatch(
+        setPersonalInfo({
+          ...personalInfo,
+        })
+      );
+    }
+  };
+
   const getMaxDate = () => {
     const today = new Date();
     const maxDate = new Date(
@@ -186,7 +395,11 @@ const PersonalDetails = () => {
                     size="small"
                     placeholder="Attended From"
                     name="personalDetails.DOB"
-                    value={values.personalDetails.DOB}
+                    value={
+                      values.personalDetails.DOB
+                        ? values.personalDetails.DOB.slice(0, 10)
+                        : ""
+                    }
                     onChange={handleChange}
                     fullWidth
                     inputProps={{
@@ -286,7 +499,7 @@ const PersonalDetails = () => {
                     {Object.entries(DestinationTypeEnum).map(([key, value]) => (
                       <MenuItem
                         key={key}
-                        value={key}
+                        value={value}
                         sx={{
                           "& .MuiTypography-root": {
                             fontSize: "14px !important",
@@ -311,68 +524,28 @@ const PersonalDetails = () => {
                   </InputLabel>
                   <FormControl>
                     <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="personalDetails.maritalStatus"
+                      aria-label="radio-group"
+                      name="Marital status"
+                      value={values.personalDetails.maritalStatus}
+                      sx={{ display: "flex", flexDirection: "row" }}
                       onChange={handleChange}
                     >
-                      <FormControlLabel
-                        sx={{
-                          "& .MuiTypography-root": {
-                            fontSize: "14px",
-                          },
-                        }}
-                        value="Married"
-                        control={
-                          <Radio
-                            size="small"
-                            sx={{
-                              "&.MuiRadio-root.Mui-checked": {
-                                color: "#3B3F76 !important",
-                              },
-                            }}
-                          />
-                        }
-                        label="Married"
-                      />
-                      <FormControlLabel
-                        sx={{
-                          "& .MuiTypography-root": {
-                            fontSize: "14px",
-                          },
-                        }}
-                        value="Unmarried"
-                        control={
-                          <Radio
-                            size="small"
-                            sx={{
-                              "&.MuiRadio-root.Mui-checked": {
-                                color: "#3B3F76 !important",
-                              },
-                            }}
-                          />
-                        }
-                        label="Unmarried"
-                      />
-                      <FormControlLabel
-                        sx={{
-                          "& .MuiTypography-root": {
-                            fontSize: "14px",
-                          },
-                        }}
-                        value="Widowed"
-                        control={
-                          <Radio
-                            size="small"
-                            sx={{
-                              "&.MuiRadio-root.Mui-checked": {
-                                color: "#3B3F76 !important",
-                              },
-                            }}
-                          />
-                        }
-                        label="Widowed"
-                      />
+                      {["Married", "Unmarried", "Widowed"].map((option) => (
+                        <FormControlLabel
+                          key={option}
+                          value={option}
+                          control={
+                            <Radio
+                              sx={{
+                                "&.Mui-checked.Mui-disabled": {
+                                  color: "#14C6A4",
+                                },
+                              }}
+                            />
+                          }
+                          label={option}
+                        />
+                      ))}
                     </RadioGroup>
                   </FormControl>
                 </Grid>
@@ -502,7 +675,9 @@ const PersonalDetails = () => {
                     name="refusal"
                     displayEmpty
                     defaultValue=""
-                    value={refused}
+                    value={
+                      values.personalDetails.visaRejectedDetails ? "yes" : "no"
+                    }
                     onChange={(e) => setRefused(e.target.value)}
                     fullWidth
                     IconComponent={ExpandMoreIcon}
@@ -630,14 +805,19 @@ const PersonalDetails = () => {
                   >
                     Country
                   </InputLabel>
-                  {/* <Select
+                  <Select
                     id="country"
                     name="personalDetails.temporaryAddress.country"
-                    // value={selectedCountry}
-                    // onChange={(e) => handleCountry(e.target.value, "permanent")}
+                    value={selectedCountry}
+                    size="small"
+                    onChange={(e) =>
+                      eventHandler({
+                        name: "temporaryCountry",
+                        data: e?.target.value,
+                      })
+                    }
                     fullWidth
                     IconComponent={ExpandMoreIcon}
-                    
                     MenuProps={MenuProps}
                     displayEmpty
                     defaultValue=""
@@ -650,7 +830,7 @@ const PersonalDetails = () => {
                         {country.name}
                       </MenuItem>
                     ))}
-                  </Select> */}
+                  </Select>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <InputLabel
@@ -660,16 +840,21 @@ const PersonalDetails = () => {
                     State/Province
                   </InputLabel>
 
-                  {/* <Select
+                  <Select
                     id="state"
                     name="personalDetails.temporaryAddress.state"
                     value={selectedState}
-                    onChange={(e) => handleStateChange(e.target.value)}
+                    size="small"
+                    onChange={(e) =>
+                      eventHandler({
+                        name: "temporaryState",
+                        data: e?.target.value,
+                      })
+                    }
                     fullWidth
                     displayEmpty
                     defaultValue=""
                     IconComponent={ExpandMoreIcon}
-                    
                     MenuProps={MenuProps}
                   >
                     <MenuItem value="" disabled>
@@ -680,7 +865,7 @@ const PersonalDetails = () => {
                         {state.name}
                       </MenuItem>
                     ))}
-                  </Select> */}
+                  </Select>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <InputLabel
@@ -690,30 +875,35 @@ const PersonalDetails = () => {
                     City/Town
                   </InputLabel>
 
-                  {/* <Select
+                  <Select
                     id="city"
+                    size="small"
                     name="personalDetails.temporaryAddress.city"
                     value={selectedCity}
                     displayEmpty
                     defaultValue=""
-                    onChange={(e) => handleCityChange(e.target.value)}
+                    onChange={(e) =>
+                      eventHandler({
+                        name: "temporaryCity",
+                        data: e?.target.value,
+                      })
+                    }
                     fullWidth
                     // disabled={!selectedState}
                     IconComponent={ExpandMoreIcon}
-                    
                     MenuProps={MenuProps}
                   >
                     <MenuItem value="" disabled>
                       Select City
                     </MenuItem>
                     {cities
-                      ? cities.map((city) => (
+                      ? cities.map((city: any) => (
                           <MenuItem key={city} value={city.name}>
                             {city.name}
                           </MenuItem>
                         ))
-                      : "Select sta"}
-                  </Select> */}
+                      : "Select state"}
+                  </Select>
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
@@ -734,12 +924,59 @@ const PersonalDetails = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <Button
-                    sx={{ textTransform: "none", fontSize: "1rem" }}
-                    onClick={handleContact}
+                  {sharedInfo?.data?.phone && Object.keys(sharedInfo.data.phone).length > 0 ? (
+                    <>
+                     <InputLabel
+                    id="firstName"
+                    sx={{ fontWeight: "600", color: "#000", mb: 1 }}
                   >
-                    + Add contact number
-                  </Button>
+                    Contact number
+                  </InputLabel>
+                    <Typography  onClick={() =>
+                      dispatch(
+                        setPopup({
+                          show: true,
+                          data: {
+                            container: {
+                              name: "phonenumber",
+                              dimensions: {
+                                width: "500px",
+                              },
+                            },
+                            type: "custom",
+                          },
+                        })
+                      )
+                    }
+                    sx={{border:"1px solid rgba(0, 0, 0, 0.23)",p:1,borderRadius:"5px"}}
+                    >
+                      {sharedInfo?.data?.phone?.countryCode}{" "}
+                      {sharedInfo?.data?.phone?.number}
+                    </Typography>
+                    </>
+                  ) : (
+                    <Button
+                      sx={{ textTransform: "none", fontSize: "1rem" }}
+                      onClick={() =>
+                        dispatch(
+                          setPopup({
+                            show: true,
+                            data: {
+                              container: {
+                                name: "phonenumber",
+                                dimensions: {
+                                  width: "500px",
+                                },
+                              },
+                              type: "custom",
+                            },
+                          })
+                        )
+                      }
+                    >
+                      + Add contact number
+                    </Button>
+                  )}
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <InputLabel id="" sx={{ color: "#000" }}>
@@ -851,27 +1088,32 @@ const PersonalDetails = () => {
                       >
                         Country
                       </InputLabel>
-                      {/* <Select
-                    id="country"
-                    name="personalDetails.permanentAddress.country"
-                    // value={selectedCountry}
-                    // onChange={(e) => handleCountry(e.target.value, "permanent")}
-                    fullWidth
-                    IconComponent={ExpandMoreIcon}
-                    
-                    MenuProps={MenuProps}
-                    displayEmpty
-                    defaultValue=""
-                  >
-                    <MenuItem value="" disabled>
-                      Select Country
-                    </MenuItem>
-                    {countries.map((country) => (
-                      <MenuItem key={country.isoCode} value={country.name}>
-                        {country.name}
-                      </MenuItem>
-                    ))}
-                  </Select> */}
+                      <Select
+                        id="country"
+                        size="small"
+                        name="personalDetails.permanentAddress.country"
+                        value={permanentCountry}
+                        onChange={(e) =>
+                          eventHandler({
+                            name: "permanentCountry",
+                            data: e?.target.value,
+                          })
+                        }
+                        fullWidth
+                        IconComponent={ExpandMoreIcon}
+                        MenuProps={MenuProps}
+                        displayEmpty
+                        defaultValue=""
+                      >
+                        <MenuItem value="" disabled>
+                          Select Country
+                        </MenuItem>
+                        {countries.map((country) => (
+                          <MenuItem key={country.isoCode} value={country.name}>
+                            {country.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <InputLabel
@@ -881,27 +1123,32 @@ const PersonalDetails = () => {
                         State/Province
                       </InputLabel>
 
-                      {/* <Select
-                    id="state"
-                    name="personalDetails.permanentAddress.state"
-                    value={selectedState}
-                    onChange={(e) => handleStateChange(e.target.value)}
-                    fullWidth
-                    displayEmpty
-                    defaultValue=""
-                    IconComponent={ExpandMoreIcon}
-                    
-                    MenuProps={MenuProps}
-                  >
-                    <MenuItem value="" disabled>
-                      Select State
-                    </MenuItem>
-                    {states.map((state) => (
-                      <MenuItem key={state.isoCode} value={state.name}>
-                        {state.name}
-                      </MenuItem>
-                    ))}
-                  </Select> */}
+                      <Select
+                        id="state"
+                        name="personalDetails.permanentAddress.state"
+                        value={permanentState}
+                        size="small"
+                        onChange={(e) =>
+                          eventHandler({
+                            name: "permanentState",
+                            data: e?.target.value,
+                          })
+                        }
+                        fullWidth
+                        displayEmpty
+                        defaultValue=""
+                        IconComponent={ExpandMoreIcon}
+                        MenuProps={MenuProps}
+                      >
+                        <MenuItem value="" disabled>
+                          Select State
+                        </MenuItem>
+                        {permanentstates.map((state) => (
+                          <MenuItem key={state.isoCode} value={state.name}>
+                            {state.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <InputLabel
@@ -911,30 +1158,32 @@ const PersonalDetails = () => {
                         City/Town
                       </InputLabel>
 
-                      {/* <Select
-                    id="city"
-                    name="personalDetails.permanentAddress.city"
-                    value={selectedCity}
-                    displayEmpty
-                    defaultValue=""
-                    onChange={(e) => handleCityChange(e.target.value)}
-                    fullWidth
-                    // disabled={!selectedState}
-                    IconComponent={ExpandMoreIcon}
-                    
-                    MenuProps={MenuProps}
-                  >
-                    <MenuItem value="" disabled>
-                      Select City
-                    </MenuItem>
-                    {cities
-                      ? cities.map((city) => (
+                      <Select
+                        id="city"
+                        name="personalDetails.permanentAddress.city"
+                        value={permanentCity}
+                        displayEmpty
+                        size="small"
+                        defaultValue=""
+                        onChange={(e) =>
+                          eventHandler({
+                            name: "permanentCity",
+                            data: e?.target.value,
+                          })
+                        }
+                        fullWidth
+                        IconComponent={ExpandMoreIcon}
+                        MenuProps={MenuProps}
+                      >
+                        <MenuItem value="" disabled>
+                          Select City
+                        </MenuItem>
+                        {permanentcities.map((city: any) => (
                           <MenuItem key={city} value={city.name}>
                             {city.name}
                           </MenuItem>
-                        ))
-                      : "Select sta"}
-                  </Select> */}
+                        ))}
+                      </Select>
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <InputLabel
@@ -984,13 +1233,6 @@ const PersonalDetails = () => {
           );
         }}
       </Formik>
-      <CustomModal
-        open={open}
-        handleClose={() => setOpen(!open)}
-        additionalData={{ width: "500px" }}
-      >
-        <PhoneNumber />
-      </CustomModal>
     </div>
   );
 };

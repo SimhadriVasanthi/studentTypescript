@@ -12,28 +12,51 @@ import {
 } from "@mui/material";
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
-import { useAppSelector } from "../../../../assets/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../assets/hooks";
 import {
   countryList,
   degreeType,
   skillsList,
   subDisciplines,
 } from "../../../../assets/menu";
+import { editProfile } from "../../../../services";
+import { setpreferences } from "../../../../store/Slices/preferencesSlice";
+import { setskills } from "../../../../store/Slices/skillsSlice";
 
 const Preferences = () => {
+  const Preferences = useAppSelector((state) => state.preferences);
+  const dispatch = useAppDispatch();
+  const [courseData, setCourseData] = useState(
+    Preferences?.data?.courses || []
+  );
+  const [countryData, setCountryData] = useState(
+    Preferences?.data?.country || []
+  );
   const initialValues = {
     preference: {
-      intake: "",
+      intake: Preferences?.data?.intake,
       budget: {
         upper: "",
         lower: "",
       },
-      degree: "",
-      country: "",
-      courses: "",
+      degree: Preferences?.data?.degree,
+      country: countryData,
+      courses: courseData,
     },
   };
-  const submit = async (values: any) => {};
+  const handleCountryChange = (event:any, newValue:any) => {
+    setCountryData(newValue);
+  };
+  const handleCourseChange = (event:any, newValue:any) => {
+      setCourseData(newValue);
+  };
+
+  const submit = async (values:any) => {
+    const response = await editProfile(values);
+    if(response){
+      dispatch(setpreferences(response.data.data.preference))
+    }
+  };
   return (
     <div>
       <Formik
@@ -74,14 +97,14 @@ const Preferences = () => {
                     size="small"
                     options={subDisciplines}
                     getOptionLabel={(option) => option}
-                    // value={courseData}
+                    value={courseData}
                     filterSelectedOptions
                     ListboxProps={{
                       style: { maxHeight: "180px", overflowY: "auto" },
                     }}
-                    // onChange={(event, newValue) =>
-                    //   handleCourseChange(event, newValue)
-                    // }
+                    onChange={(event, newValue) =>
+                      handleCourseChange(event, newValue)
+                    }
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -123,14 +146,15 @@ const Preferences = () => {
                     size="small"
                     options={countryList}
                     getOptionLabel={(option) => option}
-                    // value={countryData}
+                    value={countryData}
                     filterSelectedOptions
                     ListboxProps={{
                       style: { maxHeight: "180px", overflowY: "auto" },
                     }}
-                    // onChange={(event, newValue) =>
-                    //   handleCountryChange(event, newValue)
-                    // }
+                    
+                    onChange={(event, newValue) =>
+                      handleCountryChange(event, newValue)
+                    }
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -149,16 +173,16 @@ const Preferences = () => {
                   sm={6}
                   sx={{ display: "flex", flexDirection: "column" }}
                 >
-                  <InputLabel id="degree" 
-                      sx={{ fontWeight: "600", color: "#000", mb: 1 }}
-                      > Degree</InputLabel>
+                  <InputLabel
+                    id="degree"
+                    sx={{ fontWeight: "600", color: "#000", mb: 1 }}
+                  >
+                    {" "}
+                    Degree
+                  </InputLabel>
 
                   <FormControl size="small">
-                    <InputLabel
-                      id="degree"
-                    >
-                      Select Degree
-                    </InputLabel>
+                    <InputLabel id="degree">Select Degree</InputLabel>
 
                     <Select
                       labelId="degree"
@@ -252,16 +276,22 @@ const Preferences = () => {
 };
 
 const Skills: React.FC = () => {
-  const [skilldata, setSkillsData] = useState<string[]>([]);
-const skills = useAppSelector(state=>state.skills)
-console.log(skills)
+  const skills = useAppSelector((state) => state.skills);
+  const dispatch = useAppDispatch();
+  const [skilldata, setSkillsData] = useState<string[]>(skills.data);
+
   const handleOptionChange = (
     event: React.ChangeEvent<{}>,
     newValue: string[]
   ) => {
     setSkillsData(newValue);
   };
-
+  const submit = async () => {
+    const response = await editProfile({ skills: skilldata });
+    if (response) {
+      dispatch(setskills(response.data.data.skills));
+    }
+  };
   return (
     <div>
       <Autocomplete
@@ -308,6 +338,7 @@ console.log(skills)
             width: "fit-content",
             mt: 2,
             borderRadius: "10px",
+            display: "flex",
           }}
         >
           {skilldata?.map((item) => (
@@ -318,6 +349,7 @@ console.log(skills)
                 width: "fit-content",
                 borderRadius: "10px",
                 fontSize: "13px",
+                mr: 1,
               }}
             >
               {item}
@@ -327,7 +359,7 @@ console.log(skills)
       ) : null}
       <Button
         type="submit"
-        // onClick={() => submit}
+        onClick={submit}
         sx={{
           width: "100px",
           border: "1px solid #027A48",

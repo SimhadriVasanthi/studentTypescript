@@ -8,7 +8,6 @@ const Aptitude = ({data}:any) => {
     GMAT: useRef<HTMLInputElement>(null),
     ACT: useRef<HTMLInputElement>(null),
     SAT: useRef<HTMLInputElement>(null),
-
   };
 
   const handleSubmit = (

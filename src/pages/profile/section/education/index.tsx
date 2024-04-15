@@ -16,25 +16,25 @@ const Education = () => {
   const profile = [
     {
       title: "Masters",
-      component: <PostGrad />,
+      component: <PostGrad data={education.data.postGraduation}/>,
     },
     {
       title: "Under Graduation",
-      component: <Bachelors />,
+      component: <Bachelors data={education.data.underGraduation}/>,
     },
     {
       title: "Diploma",
-      component: <Diploma />,
+      component: <Diploma data={education.data.plus2}/>,
     },
     {
       title: "Grade 12",
       image: Images.workExperience,
-      component: <Plus2 />,
+      component: <Plus2 data={education.data.plus2}/>,
     },
     {
       title: "Grade 10",
       image: Images.workExperience,
-      component: <School />,
+      component: <School data={education.data.school}/>,
     },
   ];
   return (

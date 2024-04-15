@@ -71,4 +71,11 @@ export const expandCardStyles = {
       backgroundColor: "#fff",
     },
   },
+  iconStyle: {
+    border: "1px solid #FF751A",
+    display: "flex",
+    justifyContent: "center",
+    borderRadius: "5px",
+    padding: "0.4rem",
+  },
 };

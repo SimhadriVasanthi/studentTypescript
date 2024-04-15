@@ -4,7 +4,7 @@ import Images from "../../../../assets";
 import ExpandCard from "../../../../genericComponents/expandCard";
 import Dashboard from "../dashboard";
 import Education from "../education";
-import TestScoreForm from "../testScores";
+import TestScoreForm from "../testScores/testScores";
 import ExtraCurricular from "./extraCurricular";
 import Family from "./family";
 import PersonalDetails from "./personalDetails";

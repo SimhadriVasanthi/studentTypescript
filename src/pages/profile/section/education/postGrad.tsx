@@ -16,8 +16,13 @@ import { DestinationTypeEnum } from "../../../../assets/enums";
 import CustomField from "../../../../genericComponents/customTextfield";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { bachelors, pgCourses } from "../../../../assets/menu";
+import { useAppDispatch } from "../../../../assets/hooks";
+import { setPostGraduation } from "../../../../store/Slices/educationHistorySlice";
+import { editProfile } from "../../../../services";
 
-const PostGrad = () => {
+const PostGrad = ({data}:any) => {
+  const dispatch = useAppDispatch();
+  const [Isbacklog,setIsbacklog] = useState()
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const MenuProps = {
@@ -31,24 +36,28 @@ const PostGrad = () => {
 
   const initialValues = {
     postGraduation: {
-      instituteName: "",
-      city: "",
-      state: "",
-      country: "",
-      specialization: "", // enum  eee,ese,ece
-      degreeProgram: "", // enum btech,bedu,bsc....
-      gradingSystem: "", // enum % grade gpa cgpa
-      affiliatedUniversity: "",
-      totalScore: "", // for grade A+..., for Percent 0-100, gpa 0-10
-      startDate: "",
-      endDate: "",
-      backlogs: "",
-      isCompleted: "",
+      instituteName: data?.instituteName,
+      city: data?.city,
+      state: data?.state,
+      country: data?.country,
+      specialization: data?.specialization, // enum  eee,ese,ece
+      degreeProgram: data?.degreeProgram, // enum btech,bedu,bsc....
+      gradingSystem: data?.gradingSystem, // enum % grade gpa cgpa
+      affiliatedUniversity: data?.affiliatedUniversity,
+      totalScore: data?.totalScore, // for grade A+..., for Percent 0-100, gpa 0-10
+      startDate: data?.startDate,
+      endDate: data?.endDate,
+      backlogs: data?.backlogs,
+      isCompleted: data?.isCompleted,
     },
   };
 
   const submit = async (values: any) => {
-    console.log(values);
+    const response = await editProfile(values);
+    console.log(response);
+    if (response) {
+      dispatch(setPostGraduation(response.data.data.education.postGraduation));
+    }
   };
   return (
     <div>
@@ -278,7 +287,7 @@ const PostGrad = () => {
                       onChange={handleChange}
                     >
                       <FormControlLabel
-                        value="yes"
+                        value="true"
                         control={
                           <Radio
                             size="small"
@@ -292,7 +301,7 @@ const PostGrad = () => {
                         label="Completed"
                       />
                       <FormControlLabel
-                        value="no"
+                        value="false"
                         control={
                           <Radio
                             size="small"
@@ -375,13 +384,13 @@ const PostGrad = () => {
                     type="date"
                     placeholder="Attended From"
                     name="postGraduation.startDate"
-                    value={values.postGraduation.startDate}
+                    value={values.postGraduation.startDate?.slice(0,10)}
                     onChange={handleChange}
                     fullWidth
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  {values.postGraduation.isCompleted === "yes" && (
+                  {values.postGraduation.isCompleted === "true" ? (
                     <>
                       <InputLabel
                         id="instituteName"
@@ -402,7 +411,7 @@ const PostGrad = () => {
                         }}
                       />
                     </>
-                  )}
+                  ):null}
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <InputLabel id="" sx={{ color: "#000" }}>
@@ -412,9 +421,9 @@ const PostGrad = () => {
                     <RadioGroup
                       row
                       aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="postGraduation.backlogs"
-                      value={values.postGraduation.backlogs}
-                      onChange={handleChange}
+                      // name="underGraduation.backlogs"
+                      value={values.postGraduation.backlogs? "yes":"no"}
+                      onChange={(e:any) =>setIsbacklog(e.target.value)}
                     >
                       <FormControlLabel
                         value="yes"
@@ -447,6 +456,20 @@ const PostGrad = () => {
                     </RadioGroup>
                   </FormControl>
                 </Grid>
+                {Isbacklog === "yes" ? <Grid item xs={12} sm={6}>
+                 <InputLabel id="" sx={{ color: "#000" }}>
+                  Number of Backlogs
+                 </InputLabel>
+                 <CustomField
+                   id="name"
+                   type="number"
+                   placeholder="Attended From"
+                   name="postGraduation.backlogs"
+                   value={values.postGraduation.backlogs}
+                   onChange={handleChange}
+                   fullWidth
+                 />
+               </Grid> : null}
                 <Grid item xs={12} sm={6}>
                   <InputLabel
                     id="instituteName"
@@ -556,7 +579,7 @@ const PostGrad = () => {
                     {Object.entries(DestinationTypeEnum).map(([key, value]) => (
                       <MenuItem
                         key={key}
-                        value={key}
+                        value={value}
                         sx={{
                           "& .MuiTypography-root": {
                             fontSize: "14px !important",

@@ -9,7 +9,7 @@ import * as Yup from "yup";
 import ReactPhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { closePopup } from "../../store/Slices/popupSlice";
-import { useAppDispatch } from "../../assets/hooks";
+import { useAppDispatch, useAppSelector } from "../../assets/hooks";
 import Images from "../../assets";
 
 const Verification = () => {
@@ -111,14 +111,15 @@ const Verification = () => {
 };
 
 const PhoneNumber = () => {
+  const phoneNumber = useAppSelector(state =>state.sharedInfo)
+  console.log(phoneNumber?.data?.phone)
   const [error, setError] = useState("");
   const [phoneorVerify, setphoneorVerify] = useState("phone");
-  const [email, setEmail] = useState("");
   const [loading,setLoading] = useState(false)
   //   const Appdispatch = useAppDispatch();
   const [phone, setPhone] = useState({
-    countryCode: "",
-    number: "",
+    countryCode: phoneNumber?.data?.phone?.countryCode,
+    number: phoneNumber?.data?.phone?.number,
   });
 
   const handlePhoneChange = (value: any, data: any) => {

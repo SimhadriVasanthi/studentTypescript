@@ -1,31 +1,73 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Application, StoreItem } from "../../types/types";
+import { Application, Applications, StoreItem } from "../../types/types";
 
-let initialState:StoreItem<Application[]>={
-    requestStatus:"not_initiated",
-    responseStatus:"not_recieved",
-    haveAnIssue:false,
-    issue:"",
-    data:[]
-}
-
-export const applicationsSlice=createSlice({
-    name:'applications',
-    initialState:initialState,
-    reducers:{
-        initApplications:(state,action:PayloadAction<StoreItem<Application[]>>)=>({...action.payload}),
-        addApplication:(state,action:PayloadAction<Application>)=>({...state,data:[...state.data,action.payload]}),
-        updateApplication:(state,action:PayloadAction<Application>)=>{
-            let index=state.data.findIndex((item)=>item._id===action.payload._id);
-            state.data[index]=action.payload;
+let initialState: StoreItem<Applications> = {
+    requestStatus: "not_initiated",
+    responseStatus: "not_recieved",
+    haveAnIssue: false,
+    issue: "",
+    data: {
+        processing: [],
+        accepted: [],
+        rejected: [],
+        completed: [],
+        cancelled: [],
+    },
+};
+type Field = "processing" | "accepted" | "rejected" | "completed" | "cancelled";
+export const applicationsSlice = createSlice({
+    name: "applications",
+    initialState: initialState,
+    reducers: {
+            initApplications: (
+                state,
+                action: PayloadAction<StoreItem<Applications>>
+            ) => ({
+                ...action.payload,
+            }),
+            addApplication: (
+                state,
+                action: PayloadAction<{ field: Field; data: Application }>
+            ) => {
+                const { field, data } = action.payload;
+                state.data[field].push(data);
+            },
+        //     updateApplication: (state, action: PayloadAction<Application>) => {
+        //         const { _id } = action.payload;
+        //         for (const status in state.data) {
+        //             const index = state.data[status].findIndex((item) => item._id === _id);
+        //             if (index !== -1) {
+        //                 state.data[status][index] = action.payload;
+        //                 break; // Break out of loop once found
+        //             }
+        //         }
+        //     },
+        //     requestApplicationCancel: (
+        //         state,
+        //         action: PayloadAction<{ _id: string; status: string }>
+        //     ) => {
+        //         const { _id, status } = action.payload;
+        //         const index = state.data[status].findIndex((item) => item._id === _id);
+        //         if (index !== -1) {
+        //             state.data[status][index].cancellationRequest = true;
+        //         }
+        //     },
+        //     removeApplication: (
+        //         state,
+        //         action: PayloadAction<{ _id: string; status: string }>
+        //     ) => {
+        //         const { _id, status } = action.payload;
+        //         state.data[status] = state.data[status].filter(
+        //             (item) => item._id !== _id
+        //         );
+        //     },
         },
-        requestApplicationCancel:(state,action:PayloadAction<string>)=>{
-            let index=state.data.findIndex((item)=>item._id===action.payload);
-            state.data[index].cancellationRequest=true
-        },
-        removeApplication:(state,action:PayloadAction<string>)=>({...state,data:state.data.filter((item,index)=>item._id!==action.payload)})
-    }
-})
+});
 
-export const {initApplications,addApplication,updateApplication,removeApplication}=applicationsSlice.actions;
+export const {
+    initApplications,
+    addApplication,
+    // updateApplication,
+    // removeApplication,
+} = applicationsSlice.actions;
 export default applicationsSlice.reducer;

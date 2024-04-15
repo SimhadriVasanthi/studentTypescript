@@ -3,7 +3,6 @@ import { customCardProps } from "../types/types";
 
 export default function CustomCard({
   children,
-  handleSubmit,
 }: customCardProps) {
   return (
     <>
@@ -20,7 +19,6 @@ export default function CustomCard({
             background: "rgba(59, 63, 118, 0.1)",
           },
         }}
-        onClick={() => handleSubmit()}
       >
         <div>{children}</div>
       </Card>

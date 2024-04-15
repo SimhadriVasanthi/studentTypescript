@@ -4,13 +4,16 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import { ListItemIcon, Tooltip, useTheme } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import DescriptionIcon from "@mui/icons-material/Description";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import Person2Icon from "@mui/icons-material/Person2";
+import Images from "../../assets";
+import { useAppDispatch } from "../../assets/hooks";
+import { setUserAuthStatus } from "../../store/Slices/userAuthSlice";
 
 const profileList = [
   {
@@ -25,7 +28,9 @@ const profileList = [
 
 const ProfileSidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const theme = useTheme();
+  const dispatch = useAppDispatch();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
@@ -49,8 +54,10 @@ const ProfileSidebar = () => {
         sx={{
           overflow: "auto",
           display: "flex",
-          justifyContent: "center",
+          flexDirection: "column",
+          justifyContent: "space-between",
           marginTop: "50px",
+          mb: 3,
         }}
       >
         <List>
@@ -67,7 +74,7 @@ const ProfileSidebar = () => {
                   "&:hover": {
                     background: "#fff",
                   },
-                  color:"#3b3f7691",
+                  color: "#3b3f7691",
                   "&.Mui-selected": {
                     // textAlign: "center",
                     borderRadius: "10px",
@@ -84,7 +91,9 @@ const ProfileSidebar = () => {
                     <ListItemIcon
                       sx={{
                         color:
-                          location.pathname === item.path ? "#3b3f76" : "#3b3f7691",
+                          location.pathname === item.path
+                            ? "#3b3f76"
+                            : "#3b3f7691",
                         minWidth: "40px",
                       }}
                     >
@@ -94,7 +103,10 @@ const ProfileSidebar = () => {
                 ) : (
                   <ListItemIcon
                     sx={{
-                      color: location.pathname === item.path ? "#3b3f76" : "#3b3f7691",
+                      color:
+                        location.pathname === item.path
+                          ? "#3b3f76"
+                          : "#3b3f7691",
                       minWidth: "40px",
                     }}
                   >
@@ -102,14 +114,100 @@ const ProfileSidebar = () => {
                   </ListItemIcon>
                 )}
 
-                {!isMobile ? <ListItemText primary={item.name} sx={{
-                  "& .MuiTypography-root":{
-                    fontWeight: location.pathname === item.path ? 600:500 ,
-                  }
-                }}/> : null}
+                {!isMobile ? (
+                  <ListItemText
+                    primary={item.name}
+                    sx={{
+                      "& .MuiTypography-root": {
+                        fontWeight: location.pathname === item.path ? 600 : 500,
+                      },
+                    }}
+                  />
+                ) : null}
               </ListItemButton>
             </ListItem>
           ))}
+        </List>
+        <List>
+          <ListItem
+            sx={{ textDecoration: "none", color: "#000" }}
+            onClick={() => {
+              localStorage.clear();
+              window.location.reload();
+              dispatch(
+                setUserAuthStatus({
+                  isAuthorized: false,
+                  isRegistered: false,
+                  role: "guest",
+                })
+              );
+              navigate("/");
+            }}
+          >
+            <ListItemButton
+              sx={{
+                "&:hover": {
+                  background: "#fff",
+                },
+                color: "#3b3f7691",
+                "&.Mui-selected": {
+                  // textAlign: "center",
+                  borderRadius: "10px",
+                  background: "#fff",
+                  color: "#3b3f76",
+                  "&:hover": {
+                    background: "#fff",
+                  },
+                },
+              }}
+            >
+              {isMobile ? (
+                <Tooltip title="Logout" placement="right">
+                  <ListItemIcon
+                    sx={{
+                      backgroundColor: "#3b3f76",
+                      minWidth: "20px",
+                      borderRadius: "50%",
+                      width: "20px",
+                      height: "20px",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img src={Images.logout} alt="logout" />
+                  </ListItemIcon>
+                </Tooltip>
+              ) : (
+                <ListItemIcon
+                  sx={{
+                    backgroundColor: "#3b3f76",
+                    minWidth: "20px",
+                    borderRadius: "50%",
+                    width: "20px",
+                    height: "20px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <img src={Images.logout} alt="logout" />
+                </ListItemIcon>
+              )}
+
+              {!isMobile ? (
+                <ListItemText
+                  primary="Logout"
+                  sx={{
+                    "& .MuiTypography-root": {
+                      fontWeight: 500,
+                    },
+                    ml: 2,
+                  }}
+                />
+              ) : null}
+            </ListItemButton>
+          </ListItem>
         </List>
       </Box>
     </Box>

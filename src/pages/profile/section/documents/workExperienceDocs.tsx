@@ -3,7 +3,7 @@ import React from "react";
 import Accordion from "../../../../genericComponents/accordian";
 
 const WorkExperienceDocs = ({data}:any) => {
-
+console.log(data)
   return (
     <div>
       <Accordion title="Work experience letters">

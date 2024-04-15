@@ -24,13 +24,6 @@ const Documents = () => {
     },
   
   ];
-  // const uploadDoc = async()=>{
-  //   dispatch(addDocument({
-  //     pathArray:["personal","resume"],
-  //     isArray:false,
-  //     data:undefined
-  //   }))
-  // }
   return (
     <Box sx={{
       background: "#fff",

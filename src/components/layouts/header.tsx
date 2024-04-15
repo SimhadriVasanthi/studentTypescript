@@ -56,6 +56,7 @@ const settings = [
 
 const Header = () => {
   const navigate = useNavigate();
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -64,9 +65,10 @@ const Header = () => {
   );
   const [selectedPage, setSelectedPage] = React.useState<string>("");
   const userAuthStatus = useAppSelector((state) => state.userAuthStatus);
+  const sharedInfo = useAppSelector((state) => state.sharedInfo);
+  console.log(sharedInfo);
   const dispatch = useAppDispatch();
   const eventHandler = (event: Event) => {
-    // console.log(JSON.stringify(event,null,2))
     switch (event.name) {
       case "OpenUserMenu":
         setAnchorElUser(event.data);
@@ -94,9 +96,9 @@ const Header = () => {
             data: {
               container: {
                 name: "login",
-                dimensions:{
-                  width:"500px"
-                }
+                dimensions: {
+                  width: "500px",
+                },
               },
               type: "custom",
             },
@@ -150,6 +152,7 @@ const Header = () => {
                     fontSize: "1rem",
                     fontWeight: page.title === selectedPage ? 600 : 500,
                   }}
+                  className={page.title === selectedPage ?"underlined" :""}
                 >
                   {page.title}
                 </Button>
@@ -166,7 +169,7 @@ const Header = () => {
                   }}
                   sx={{ p: 0 }}
                 >
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  <Avatar alt="profile" src={sharedInfo?.data?.displayPicSrc} />
                 </IconButton>
               ) : (
                 <CustomButton

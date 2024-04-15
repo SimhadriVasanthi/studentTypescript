@@ -6,7 +6,7 @@ import PersonalDocs from "./personalDocs";
 
 const TranscriptDocs = () => {
   const documents = useAppSelector(state=>state.documents)
-
+console.log(documents)
   const profile = [
     {
       title: "Personal Documents",

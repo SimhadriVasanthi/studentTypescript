@@ -9,6 +9,8 @@ import ProfileLayout from "../pages/profile/Profile";
 import { useAppSelector } from "../assets/hooks";
 import CustomModal from "../genericComponents/modalPopup/customModal";
 import { COMPONENTS } from "../assets/enums";
+import PdfPreview from "../pages/profile/section/documents/pdfView";
+import University from "../pages/university";
 
 export const getComponent = (id: string) => {
   let index = COMPONENTS.findIndex((item) => item.name == id);
@@ -27,11 +29,12 @@ function Routing() {
       <BrowserRouter>
         <Header />
         <Routes>
-          {/* <Route path="/" element={<Login/>} /> */}
           <Route path="/courses" element={<Courses />} />
           <Route path="/" element={<Home />} />
           <Route path="/sidebar" element={<Profile />} />
+          <Route path="/pdfPreview" element={<PdfPreview />} />
           <Route path="/recommendations" element={<Recommendations />} />
+          <Route path="/university/:id" element={<University />} />
           <Route element={<ProtectedRoute link={"/profile/*"} />}>
             <Route path="/profile/*" element={<ProfileLayout />} />
           </Route>

@@ -1,5 +1,8 @@
 export const degreeType = [
   "Pre-Master",
+  "Masters",
+  "Bachelors",
+  "Phd",
   "Postgraduate Diploma",
   "Postgraduate Certificate",
   "PMP",
@@ -206,18 +209,26 @@ export const testScores = [
       [
         {
           description: "Verbal Reasoning",
+          count:""
         },
         {
           description: "Quantitative Reasoning",
+          count:""
+
         },
         {
           description: "Analytical Writing Assessment",
+          count:""
+
         },
         {
           description: "Total",
+          count:""
+
         },
       ]
-    ]
+    ],
+    tookTest:""
   },
   {
     name:"Graduate Management Admission Test",
@@ -226,21 +237,33 @@ export const testScores = [
         
         {
           description: "Verbal Reasoning",
+          count:""
+
         },
         {
           description: "Quantitative Reasoning",
+          count:""
+
         },
         {
           description: "Analytical Writing Assessment",
+          count:""
+
         },
         {
           description: "Integrated Reasoning",
+          count:""
+
         },
         {
           description: "Total",
+          count:""
+
         },
       ]
-    ]
+    ],
+    tookTest:""
+
   },
   {
     name:"Test of English as a Foreign Language",
@@ -248,21 +271,33 @@ export const testScores = [
       [
         {
           description: "Reading",
+          count:""
+
         },
         {
           description: "Writing",
+          count:""
+
         },
         {
           description: "Speaking",
+          count:""
+
         },
         {
           description: "Listening",
+          count:""
+
         },
         {
           description: "Total",
+          count:""
+
         },
       ]
-    ]
+    ],
+    tookTest:""
+
   },
   {
     name:"International English Language Testing System",
@@ -270,21 +305,33 @@ export const testScores = [
       [
         {
           description: "Reading",
+          count:""
+
         },
         {
           description: "Writing",
+          count:""
+
         },
         {
           description: "Speaking",
+          count:""
+
         },
         {
           description: "Listening",
+          count:""
+
         },
         {
           description: "Total",
+          count:""
+
         },
       ]
-    ]
+    ],
+    tookTest:""
+
   },
   {
     name:"Pearson Test of English",
@@ -292,21 +339,33 @@ export const testScores = [
       [
         {
           description: "Reading",
+          count:""
+
         },
         {
           description: "Writing",
+          count:""
+
         },
         {
           description: "Speaking",
+          count:""
+
         },
         {
           description: "Listening",
+          count:""
+
         },
         {
           description: "Total",
+          count:""
+
         },
       ]
-    ]
+    ],
+    tookTest:""
+
   },
   {
     name:"Duolingo English Test",
@@ -314,21 +373,33 @@ export const testScores = [
       [
         {
           description: "Literacy",
+          count:""
+
         },
         {
           description: "Conversation",
+          count:""
+
         },
         {
           description: "Comprehension",
+          count:""
+
         },
         {
           description: "production",
+          count:""
+
         },
         {
           description: "Total",
+          count:""
+
         },
       ]
-    ]
+    ],
+    tookTest:""
+
   }
 ]
 export const diplomaCourses = [

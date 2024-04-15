@@ -101,6 +101,10 @@ import Images from "../../../../assets";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { CustomButton } from "../../../../genericComponents/customButton";
 import { IndustryTypeEnum } from "../../../../assets/enums";
+import { useAppDispatch, useAppSelector } from "../../../../assets/hooks";
+import { WorkExperience } from "../../../../types/types";
+import { setWorkExperience } from "../../../../store/Slices/workexperienceSlice";
+import { editProfile } from "../../../../services";
 
 interface WorkExperienceMember {
   companyName: string;
@@ -120,20 +124,26 @@ const MenuProps = {
     },
   },
 };
-const WorkExperience = () => {
+const WorkExperiences = () => {
+  const dispatch = useAppDispatch();
+  const workExperienceData = useAppSelector((state) => state.workexperience);
   const [workStatus, setWorkStatus] = useState<("completed" | "ongoing")[]>([]);
   const [WorkExperienceDetails, setWorkExperienceDetails] = useState<
-    WorkExperienceMember[]
-  >([
-    {
-      companyName: "",
-      sector: "",
-      type: "",
-      designation: "",
-      startDate: "",
-      endDate: "",
-    },
-  ]);
+    WorkExperience[]
+  >(
+    workExperienceData.data?.length > 0
+      ? workExperienceData.data
+      : [
+          {
+            companyName: "",
+            sector: "",
+            type: "",
+            startDate: "",
+            endDate: "",
+            designation: "",
+          }
+        ]
+  );
 
   const addWorkExperienceMember = () => {
     setWorkExperienceDetails([
@@ -155,7 +165,7 @@ const WorkExperience = () => {
   ) => {
     const { name, value } = event.target;
     const newWorkExperienceDetails = [...WorkExperienceDetails];
-    newWorkExperienceDetails[index][name as keyof WorkExperienceMember] = value; // type assertion to avoid TypeScript error
+    newWorkExperienceDetails[index][name as keyof WorkExperience] = value; // type assertion to avoid TypeScript error
     setWorkExperienceDetails(newWorkExperienceDetails);
   };
 
@@ -173,14 +183,19 @@ const WorkExperience = () => {
     newWorkExperienceDetails.splice(index, 1);
     setWorkExperienceDetails(newWorkExperienceDetails);
   };
-  const submitForm = () => {
-    console.log(WorkExperienceDetails);
-    // Perform form submission logic here
+  const submitForm = async () => {
+
+    let workexperience = {
+      workExperience: WorkExperienceDetails,
+    };
+    const response = await editProfile(workexperience);
+    if (response) {
+      dispatch(setWorkExperience(response.data.data.workExperience));
+    }
   };
-  const statusChange = () => {};
   return (
     <div>
-      {WorkExperienceDetails.map((WorkExperienceMember, index) => (
+      {WorkExperienceDetails?.map((WorkExperienceMember, index) => (
         <div className="mb-5" key={index}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
@@ -228,7 +243,7 @@ const WorkExperience = () => {
                 {Object.entries(IndustryTypeEnum).map(([key, value]) => (
                   <MenuItem
                     key={key}
-                    value={key}
+                    value={value}
                     sx={{
                       "& .MuiTypography-root": {
                         fontSize: "14px !important",
@@ -316,7 +331,7 @@ const WorkExperience = () => {
                 type="date"
                 name={`startDate`}
                 placeholder="Guardian Occupation"
-                value={WorkExperienceMember.startDate}
+                value={WorkExperienceMember.startDate.slice(0,10)}
                 onChange={(e: any) => handleInputChange(index, e)}
                 required
                 fullWidth
@@ -333,7 +348,7 @@ const WorkExperience = () => {
                     type="date"
                     name={`endDate`}
                     placeholder="Guardian Occupation"
-                    value={WorkExperienceMember.endDate}
+                    value={WorkExperienceMember.endDate.slice(0,10)}
                     onChange={(e: any) => handleInputChange(index, e)}
                     required
                     fullWidth
@@ -445,4 +460,4 @@ const WorkExperience = () => {
   );
 };
 
-export default WorkExperience;
+export default WorkExperiences;
